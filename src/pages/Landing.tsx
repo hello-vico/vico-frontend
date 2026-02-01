@@ -1,10 +1,32 @@
-import React from 'react';
-import { ArrowRight, Calendar, Users, BarChart3 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { ArrowRight, Calendar, Users, BarChart3, MapPin, Phone, Loader2 } from 'lucide-react';
+import { getRistoranti } from '../api/ristoranti';
+import type { Ristorante } from '../types';
 
 const Landing = () => {
+  const [restaurants, setRestaurants] = useState<Ristorante[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      try {
+        setLoading(true);
+        const data = await getRistoranti();
+        setRestaurants(data);
+      } catch (err) {
+        console.error('Error fetching restaurants:', err);
+        setError('Failed to load restaurants');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRestaurants();
+  }, []);
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-emerald-500/30">
-      <div className="fixed top-0 left-0 bg-red-500 text-white p-2 z-[9999]">APP IS RUNNING</div>
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -76,6 +98,48 @@ const Landing = () => {
         </div>
       </section>
 
+      {/* Restaurants Section */}
+      <section id="restaurants" className="py-20 border-t border-slate-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+              Our Partner Restaurants
+            </h2>
+            <p className="text-slate-400 max-w-2xl mx-auto">
+              Discover the elite establishments using VICO to transform their guest experience.
+            </p>
+          </div>
+
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-20 gap-4">
+              <Loader2 className="w-10 h-10 text-emerald-500 animate-spin" />
+              <p className="text-slate-500 animate-pulse">Fetching latest restaurant data...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-20 bg-red-500/5 border border-red-500/20 rounded-2xl">
+              <p className="text-red-400">{error}</p>
+              <button
+                onClick={() => window.location.reload()}
+                className="mt-4 text-sm font-medium text-emerald-500 hover:text-emerald-400"
+              >
+                Try Again
+              </button>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {restaurants.map((restaurant) => (
+                <RestaurantCard key={restaurant.id} restaurant={restaurant} />
+              ))}
+              {restaurants.length === 0 && (
+                <div className="col-span-full text-center py-20 border border-dashed border-slate-800 rounded-2xl">
+                  <p className="text-slate-500 text-lg">No restaurants available at the moment.</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="py-12 border-t border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
@@ -103,6 +167,44 @@ const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, titl
     </div>
     <h3 className="text-xl font-bold mb-3">{title}</h3>
     <p className="text-slate-400 leading-relaxed">{description}</p>
+  </div>
+);
+
+const RestaurantCard = ({ restaurant }: { restaurant: Ristorante }) => (
+  <div className="group relative p-6 bg-slate-900/40 border border-slate-800 rounded-2xl hover:border-emerald-500/30 transition-all duration-300 overflow-hidden">
+    <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 blur-[50px] group-hover:bg-emerald-500/20 transition-all duration-500" />
+
+    <div className="relative">
+      <div className="flex justify-between items-start mb-4">
+        <h3 className="text-xl font-bold group-hover:text-emerald-400 transition-colors">
+          {restaurant.nome}
+        </h3>
+        <span className="px-2 py-1 bg-emerald-500/10 text-emerald-500 text-[10px] uppercase font-bold tracking-widest rounded-md border border-emerald-500/20">
+          Partner
+        </span>
+      </div>
+
+      <div className="space-y-3">
+        <div className="flex items-center gap-3 text-slate-400 group-hover:text-slate-300 transition-colors">
+          <MapPin className="w-4 h-4 text-emerald-500/70" />
+          <span className="text-sm">{restaurant.indirizzo}</span>
+        </div>
+        <div className="flex items-center gap-3 text-slate-400 group-hover:text-slate-300 transition-colors">
+          <Phone className="w-4 h-4 text-emerald-500/70" />
+          <span className="text-sm font-mono">{restaurant.telefono}</span>
+        </div>
+      </div>
+
+      <div className="mt-6 pt-6 border-t border-slate-800/50 flex justify-between items-center">
+        <div className="text-[10px] text-slate-500 uppercase tracking-tighter">
+          VAT: {restaurant.p_iva}
+        </div>
+        <button className="text-sm font-bold text-emerald-500 flex items-center gap-1 group/btn">
+          View Detail
+          <ArrowRight className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" />
+        </button>
+      </div>
+    </div>
   </div>
 );
 
