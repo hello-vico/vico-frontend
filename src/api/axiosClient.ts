@@ -16,4 +16,18 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
+// Response interceptor for handling errors
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401) {
+            localStorage.removeItem('vico_token');
+            if (window.location.pathname !== '/login') {
+                window.location.href = '/login';
+            }
+        }
+        return Promise.reject(error);
+    }
+);
+
 export default api;

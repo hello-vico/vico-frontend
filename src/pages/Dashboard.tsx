@@ -2,16 +2,22 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getRistoranti } from '../api/ristoranti';
 import { RistoranteCard } from '../features/ristoranti/RistoranteCard';
+import type { Ristorante } from '../types';
 import { Plus, LayoutDashboard, Utensils, Calendar as CalendarIcon, Settings, LogOut } from 'lucide-react';
 
 const Dashboard: React.FC = () => {
-    const { data: ristoranti, isLoading, error } = useQuery({
+    const { data: ristoranti, isLoading, error } = useQuery<Ristorante[]>({
         queryKey: ['ristoranti'],
-        queryFn: getRistoranti,
+        queryFn: () => getRistoranti(),
     });
 
     const handleManage = (id: number) => {
         console.log('Managing restaurant:', id);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('vico_token');
+        window.location.href = '/';
     };
 
     return (
@@ -25,15 +31,15 @@ const Dashboard: React.FC = () => {
                 </div>
 
                 <nav className="flex-1 px-4 space-y-1">
-                    <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl bg-brand-primary/10 text-brand-primary font-medium">
+                    <a href="/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-xl bg-brand-primary/10 text-brand-primary font-medium">
                         <LayoutDashboard size={20} />
                         Dashboard
                     </a>
-                    <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-slate-50 transition-colors">
+                    <a href="/dashboard/ristoranti" className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-slate-50 transition-colors">
                         <Utensils size={20} />
                         Ristoranti
                     </a>
-                    <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-slate-50 transition-colors">
+                    <a href="/dashboard/prenotazioni" className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-slate-50 transition-colors">
                         <CalendarIcon size={20} />
                         Prenotazioni
                     </a>
@@ -44,7 +50,10 @@ const Dashboard: React.FC = () => {
                         <Settings size={20} />
                         Impostazioni
                     </button>
-                    <button className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-red-500 hover:bg-red-50 transition-colors">
+                    <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-red-500 hover:bg-red-50 transition-colors"
+                    >
                         <LogOut size={20} />
                         Logout
                     </button>

@@ -2,8 +2,6 @@ import api from './axiosClient';
 import type { Ristorante, CreateRistoranteDto } from '../types';
 
 export const getRistoranti = async (telefono?: string): Promise<Ristorante[]> => {
-
-    telefono = "+390305788592";
     const response = await api.get('/ristoranti/', {
         params: { telefono }
     });
