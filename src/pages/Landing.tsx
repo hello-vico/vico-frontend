@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowRight, Calendar, Users, BarChart3 } from 'lucide-react';
 
-const App = () => {
+const Landing = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-emerald-500/30">
       <div className="fixed top-0 left-0 bg-red-500 text-white p-2 z-[9999]">APP IS RUNNING</div>
@@ -106,4 +106,4 @@ const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, titl
   </div>
 );
 
-export default App;
+export default Landing;
