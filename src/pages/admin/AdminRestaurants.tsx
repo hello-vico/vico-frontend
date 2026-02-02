@@ -1,11 +1,11 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { Utensils, Settings, Plus } from 'lucide-react';
 import { getRistoranti } from '../../api/ristoranti';
 import { RistoranteCard } from '../../features/ristoranti/RistoranteCard';
 import type { Ristorante } from '../../types';
-import { Utensils, Users, Settings, Plus, TrendingUp, Calendar } from 'lucide-react';
 
-const AdminDashboard: React.FC = () => {
+const AdminRestaurants: React.FC = () => {
     const { data: ristoranti, isLoading, error } = useQuery<Ristorante[]>({
         queryKey: ['ristoranti'],
         queryFn: () => getRistoranti(),
@@ -13,17 +13,12 @@ const AdminDashboard: React.FC = () => {
 
     return (
         <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-                <StatCard title="Total Restaurants" value={ristoranti?.length || 0} icon={<Utensils className="text-emerald-600" />} trend="+2 this month" />
-                <StatCard title="Total Bookings" value="1,284" icon={<Calendar className="text-blue-600" />} trend="+12% vs last month" />
-                <StatCard title="Active Users" value="842" icon={<Users className="text-purple-600" />} trend="+5% today" />
-                <StatCard title="Revenue Share" value="€4.2k" icon={<TrendingUp className="text-amber-600" />} trend="+8% vs last week" />
-            </div>
-
             <div className="flex items-center justify-between mb-8">
                 <div>
-                    <h2 className="text-2xl font-bold text-slate-900">Ristoranti Registrati</h2>
-                    <p className="text-slate-500 mt-1">Gestisci e monitora tutti i ristoranti della piattaforma.</p>
+                    <h2 className="text-2xl font-bold text-slate-900">Gestione Ristoranti</h2>
+                    <p className="text-slate-500 mt-1">
+                        Visualizza, gestisci e configura tutti i ristoranti presenti sulla piattaforma.
+                    </p>
                 </div>
                 <button className="flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-2xl font-bold hover:bg-emerald-500 transition-all shadow-lg shadow-emerald-200 hover:-translate-y-0.5 active:translate-y-0">
                     <Plus size={20} />
@@ -44,7 +39,9 @@ const AdminDashboard: React.FC = () => {
                     </div>
                     <div>
                         <p className="font-bold">Errore di caricamento</p>
-                        <p className="text-sm opacity-80">Non è stato possibile caricare i ristoranti. Verifica la connessione al server.</p>
+                        <p className="text-sm opacity-80">
+                            Non è stato possibile caricare i ristoranti. Verifica la connessione al server.
+                        </p>
                     </div>
                 </div>
             ) : (
@@ -62,7 +59,9 @@ const AdminDashboard: React.FC = () => {
                                 <Utensils size={40} className="text-slate-300" />
                             </div>
                             <h3 className="text-xl font-bold text-slate-800 mb-2">Nessun ristorante trovato</h3>
-                            <p className="text-slate-500 max-w-sm mx-auto">Non ci sono ancora ristoranti registrati nel sistema. Clicca sul pulsante in alto per aggiungerne uno.</p>
+                            <p className="text-slate-500 max-w-sm mx-auto">
+                                Non ci sono ancora ristoranti registrati nel sistema. Clicca sul pulsante in alto per aggiungerne uno.
+                            </p>
                         </div>
                     )}
                 </div>
@@ -71,19 +70,5 @@ const AdminDashboard: React.FC = () => {
     );
 };
 
-const StatCard: React.FC<{ title: string, value: string | number, icon: React.ReactNode, trend: string }> = ({ title, value, icon, trend }) => (
-    <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-        <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center">
-                {icon}
-            </div>
-            <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg">
-                {trend}
-            </span>
-        </div>
-        <p className="text-slate-500 text-sm font-medium">{title}</p>
-        <h3 className="text-3xl font-bold text-slate-900 mt-1">{value}</h3>
-    </div>
-);
+export default AdminRestaurants;
 
-export default AdminDashboard;
