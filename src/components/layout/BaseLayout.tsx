@@ -70,7 +70,9 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({ children, title, navItems, user
 
                 <div className="p-6 border-t border-slate-100 space-y-1.5">
                     <button
-                        onClick={() => navigate(`/${userRole}/settings`)}
+                        onClick={() =>
+                            navigate(userRole === 'admin' ? '/admin/settings' : '/restaurant/settings')
+                        }
                         className="flex items-center gap-3 px-4 py-3 w-full rounded-2xl text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-colors"
                     >
                         <Settings size={20} className="text-slate-400" />

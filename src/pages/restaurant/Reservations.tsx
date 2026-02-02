@@ -1,13 +1,9 @@
 import React from 'react';
 import BaseLayout from '../../components/layout/BaseLayout';
 import { Calendar, Filter, Download, Search, MoreHorizontal, CheckCircle2, Clock, XCircle } from 'lucide-react';
+import { restaurantNavItems } from './navItems';
 
 const Reservations: React.FC = () => {
-    const navItems = [
-        { label: 'Dashboard', icon: <Calendar size={20} />, path: '/restaurant/dashboard' },
-        { label: 'Prenotazioni', icon: <Calendar size={20} />, path: '/restaurant/reservations' },
-        { label: 'Menu', icon: <Calendar size={20} />, path: '/restaurant/menu' },
-    ];
 
     const reservations = [
         { id: 1, name: 'Mario Rossi', guests: 4, time: '13:00', status: 'confirmed', table: 'T-04', phone: '+39 333 123 4567' },
@@ -19,7 +15,7 @@ const Reservations: React.FC = () => {
     return (
         <BaseLayout
             title="Gestione Prenotazioni"
-            navItems={navItems}
+            navItems={restaurantNavItems}
             userRole="owner"
             userName="Luigi's Pasta"
         >

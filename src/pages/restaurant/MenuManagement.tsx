@@ -1,13 +1,9 @@
 import React from 'react';
 import BaseLayout from '../../components/layout/BaseLayout';
 import { Utensils, Plus, Tag, LayoutGrid, List } from 'lucide-react';
+import { restaurantNavItems } from './navItems';
 
 const MenuManagement: React.FC = () => {
-    const navItems = [
-        { label: 'Dashboard', icon: <Utensils size={20} />, path: '/restaurant/dashboard' },
-        { label: 'Prenotazioni', icon: <Utensils size={20} />, path: '/restaurant/reservations' },
-        { label: 'Menu', icon: <Utensils size={20} />, path: '/restaurant/menu' },
-    ];
 
     const categories = [
         { id: 1, name: 'Primi piatti', count: 12 },
@@ -19,7 +15,7 @@ const MenuManagement: React.FC = () => {
     return (
         <BaseLayout
             title="Gestione Menu"
-            navItems={navItems}
+            navItems={restaurantNavItems}
             userRole="owner"
             userName="Luigi's Pasta"
         >

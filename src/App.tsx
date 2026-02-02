@@ -6,6 +6,7 @@ import AdminLayout from './pages/admin/AdminLayout'
 import RestaurantDashboard from './pages/restaurant/RestaurantDashboard'
 import Reservations from './pages/restaurant/Reservations'
 import MenuManagement from './pages/restaurant/MenuManagement'
+import RestaurantSettings from './pages/restaurant/RestaurantSettings'
 
 function AppRoutes() {
   const { isAuthenticated, isOwner } = useAuth();
@@ -35,6 +36,10 @@ function AppRoutes() {
       <Route
         path="/restaurant/menu"
         element={isAuthenticated ? <MenuManagement /> : <Navigate to="/login" replace />}
+      />
+      <Route
+        path="/restaurant/settings"
+        element={isAuthenticated ? <RestaurantSettings /> : <Navigate to="/login" replace />}
       />
 
       {/* Redirect generic dashboard to specific one */}

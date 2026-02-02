@@ -1,18 +1,14 @@
 import React from 'react';
 import BaseLayout from '../../components/layout/BaseLayout';
-import { LayoutDashboard, Calendar, Utensils, TrendingUp, Clock, CheckCircle2, ChevronRight, Users } from 'lucide-react';
+import { Calendar, Utensils, TrendingUp, Clock, CheckCircle2, ChevronRight, Users } from 'lucide-react';
+import { restaurantNavItems } from './navItems';
 
 const RestaurantDashboard: React.FC = () => {
-    const navItems = [
-        { label: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/restaurant/dashboard' },
-        { label: 'Prenotazioni', icon: <Calendar size={20} />, path: '/restaurant/reservations' },
-        { label: 'Menu', icon: <Utensils size={20} />, path: '/restaurant/menu' },
-    ];
 
     return (
         <BaseLayout
             title="Ristorante Overview"
-            navItems={navItems}
+            navItems={restaurantNavItems}
             userRole="owner"
             userName="Luigi's Pasta"
         >
