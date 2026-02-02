@@ -1,9 +1,100 @@
-import React from 'react';
+import React, { useState } from 'react';
 import BaseLayout from '../../components/layout/BaseLayout';
 import { restaurantNavItems } from './navItems';
 import { Bell, FileText, Globe, Lock, MapPin, Phone, Save, Shield, Utensils, CalendarClock, Upload, Trash2 } from 'lucide-react';
 
+type DayKey = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
+
+interface ShiftHours {
+    from: string;
+    to: string;
+}
+
+interface DaySchedule {
+    open: boolean;
+    lunch: ShiftHours;
+    dinner: ShiftHours;
+}
+
+const defaultSchedule: Record<DayKey, DaySchedule> = {
+    mon: { open: true, lunch: { from: '12:00', to: '15:00' }, dinner: { from: '19:00', to: '23:00' } },
+    tue: { open: true, lunch: { from: '12:00', to: '15:00' }, dinner: { from: '19:00', to: '23:00' } },
+    wed: { open: true, lunch: { from: '12:00', to: '15:00' }, dinner: { from: '19:00', to: '23:00' } },
+    thu: { open: true, lunch: { from: '12:00', to: '15:00' }, dinner: { from: '19:00', to: '23:00' } },
+    fri: { open: true, lunch: { from: '12:00', to: '15:00' }, dinner: { from: '19:00', to: '23:00' } },
+    sat: { open: true, lunch: { from: '12:00', to: '15:00' }, dinner: { from: '19:00', to: '23:00' } },
+    sun: { open: false, lunch: { from: '12:00', to: '15:00' }, dinner: { from: '19:00', to: '23:00' } },
+};
+
+const dayLabels: { key: DayKey; label: string }[] = [
+    { key: 'mon', label: 'Lunedì' },
+    { key: 'tue', label: 'Martedì' },
+    { key: 'wed', label: 'Mercoledì' },
+    { key: 'thu', label: 'Giovedì' },
+    { key: 'fri', label: 'Venerdì' },
+    { key: 'sat', label: 'Sabato' },
+    { key: 'sun', label: 'Domenica' },
+];
+
 const RestaurantSettings: React.FC = () => {
+    const [schedule, setSchedule] = useState<Record<DayKey, DaySchedule>>(defaultSchedule);
+
+    const handleToggleOpen = (day: DayKey, open: boolean) => {
+        setSchedule((prev) => ({
+            ...prev,
+            [day]: {
+                ...prev[day],
+                open,
+            },
+        }));
+    };
+
+    const handleChangeShift = (
+        day: DayKey,
+        shift: 'lunch' | 'dinner',
+        field: 'from' | 'to',
+        value: string
+    ) => {
+        setSchedule((prev) => ({
+            ...prev,
+            [day]: {
+                ...prev[day],
+                [shift]: {
+                    ...prev[day][shift],
+                    [field]: value,
+                },
+            },
+        }));
+    };
+
+    const copyMondayToWeekdays = () => {
+        setSchedule((prev) => {
+            const base = prev.mon;
+            return {
+                ...prev,
+                tue: { ...base },
+                wed: { ...base },
+                thu: { ...base },
+                fri: { ...base },
+            };
+        });
+    };
+
+    const copyMondayToAll = () => {
+        setSchedule((prev) => {
+            const base = prev.mon;
+            return {
+                mon: { ...base },
+                tue: { ...base },
+                wed: { ...base },
+                thu: { ...base },
+                fri: { ...base },
+                sat: { ...base },
+                sun: { ...base },
+            };
+        });
+    };
+
     return (
         <BaseLayout
             title="Impostazioni Ristorante"
@@ -80,48 +171,75 @@ const RestaurantSettings: React.FC = () => {
                             </div>
                         </div>
 
+                        <div className="flex flex-wrap items-center justify-between gap-3 text-xs mb-3">
+                            <span className="font-semibold text-slate-500 uppercase tracking-wide">
+                                Azioni rapide orari
+                            </span>
+                            <div className="flex flex-wrap gap-2">
+                                <button
+                                    type="button"
+                                    onClick={copyMondayToWeekdays}
+                                    className="px-3 py-1.5 rounded-2xl border border-slate-200 bg-slate-50 text-[11px] font-semibold text-slate-600 hover:bg-slate-100"
+                                >
+                                    Copia Lunedì su Lun–Ven
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={copyMondayToAll}
+                                    className="px-3 py-1.5 rounded-2xl border border-emerald-200 bg-emerald-50 text-[11px] font-semibold text-emerald-700 hover:bg-emerald-100"
+                                >
+                                    Copia Lunedì su tutti i giorni
+                                </button>
+                            </div>
+                        </div>
+
                         <div className="border border-slate-100 rounded-2xl overflow-hidden">
-                            {[
-                                'Lunedì',
-                                'Martedì',
-                                'Mercoledì',
-                                'Giovedì',
-                                'Venerdì',
-                                'Sabato',
-                                'Domenica',
-                            ].map((day, idx) => (
+                            {dayLabels.map((day, idx) => (
                                 <div
-                                    key={day}
+                                    key={day.key}
                                     className={`flex flex-col gap-3 px-4 md:px-6 py-3 text-sm ${
                                         idx !== 6 ? 'border-b border-slate-50' : ''
                                     } bg-white`}
                                 >
                                     <div className="flex items-center justify-between gap-3">
-                                        <div className="flex-1 font-medium text-slate-800">{day}</div>
+                                        <div className="flex-1 font-medium text-slate-800">{day.label}</div>
                                         <label className="inline-flex items-center gap-2 text-xs font-medium text-slate-600">
                                             <input
                                                 type="checkbox"
-                                                defaultChecked={idx < 5}
+                                                checked={schedule[day.key].open}
+                                                onChange={(e) => handleToggleOpen(day.key, e.target.checked)}
                                                 className="h-4 w-4 rounded border-slate-300 text-emerald-600"
                                             />
                                             Aperto
                                         </label>
                                     </div>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pl-0 md:pl-6 text-xs text-slate-600">
+                                    <div
+                                        className={`grid grid-cols-1 md:grid-cols-2 gap-3 pl-0 md:pl-6 text-xs text-slate-600 ${
+                                            !schedule[day.key].open ? 'opacity-60' : ''
+                                        }`}
+                                    >
                                         <div className="flex flex-wrap items-center gap-2">
                                             <span className="font-semibold text-slate-700">Pranzo</span>
                                             <span className="hidden md:inline text-slate-400">dalle</span>
                                             <input
                                                 type="time"
-                                                defaultValue="12:00"
+                                                value={schedule[day.key].lunch.from}
+                                                onChange={(e) =>
+                                                    handleChangeShift(day.key, 'lunch', 'from', e.target.value)
+                                                }
                                                 className="rounded-xl border border-slate-200 px-2 py-1 text-xs"
+                                                disabled={!schedule[day.key].open}
                                             />
                                             <span className="hidden md:inline text-slate-400">alle</span>
                                             <input
                                                 type="time"
-                                                defaultValue="15:00"
+                                                value={schedule[day.key].lunch.to}
+                                                onChange={(e) =>
+                                                    handleChangeShift(day.key, 'lunch', 'to', e.target.value)
+                                                }
                                                 className="rounded-xl border border-slate-200 px-2 py-1 text-xs"
+                                                disabled={!schedule[day.key].open}
                                             />
                                         </div>
                                         <div className="flex flex-wrap items-center gap-2">
@@ -129,14 +247,22 @@ const RestaurantSettings: React.FC = () => {
                                             <span className="hidden md:inline text-slate-400">dalle</span>
                                             <input
                                                 type="time"
-                                                defaultValue="19:00"
+                                                value={schedule[day.key].dinner.from}
+                                                onChange={(e) =>
+                                                    handleChangeShift(day.key, 'dinner', 'from', e.target.value)
+                                                }
                                                 className="rounded-xl border border-slate-200 px-2 py-1 text-xs"
+                                                disabled={!schedule[day.key].open}
                                             />
                                             <span className="hidden md:inline text-slate-400">alle</span>
                                             <input
                                                 type="time"
-                                                defaultValue="23:00"
+                                                value={schedule[day.key].dinner.to}
+                                                onChange={(e) =>
+                                                    handleChangeShift(day.key, 'dinner', 'to', e.target.value)
+                                                }
                                                 className="rounded-xl border border-slate-200 px-2 py-1 text-xs"
+                                                disabled={!schedule[day.key].open}
                                             />
                                         </div>
                                     </div>
