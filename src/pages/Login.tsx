@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LogIn, Lock, User, Loader2, AlertCircle } from 'lucide-react';
 import { login } from '../api/auth';
+import { useAuth } from '../contexts/AuthContext';
 
 const Login: React.FC = () => {
     const [username, setUsername] = useState('');
@@ -9,6 +10,7 @@ const Login: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
+    const { login: authLogin } = useAuth();
 
     const performLogin = async (u: string, p: string) => {
         setLoading(true);
@@ -19,16 +21,14 @@ const Login: React.FC = () => {
             if (u === 'admin' && p === 'password123') {
                 // Simulate successful login
                 const fakeToken = 'demo_token_' + Date.now();
-                localStorage.setItem('vico_token', fakeToken);
-                localStorage.setItem('vico_user_role', 'admin');
+                authLogin(fakeToken, 'admin');
                 navigate('/dashboard');
                 return;
             }
             
             if (u === 'owner' && p === 'password123') {
                 const fakeToken = 'demo_token_' + Date.now();
-                localStorage.setItem('vico_token', fakeToken);
-                localStorage.setItem('vico_user_role', 'owner');
+                authLogin(fakeToken, 'owner');
                 navigate('/dashboard');
                 return;
             }
@@ -40,12 +40,8 @@ const Login: React.FC = () => {
             params.append('password', p);
 
             const response = await login(params as any);
-            localStorage.setItem('vico_token', response.access_token);
-
-            // Set role based on username
             const role = u.toLowerCase().includes('admin') ? 'admin' : 'owner';
-            localStorage.setItem('vico_user_role', role);
-
+            authLogin(response.access_token, role);
             navigate('/dashboard');
         } catch (err: any) {
             console.error('Login error:', err);

@@ -1,6 +1,7 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { LogOut, Settings } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface NavItem {
     label: string;
@@ -18,10 +19,12 @@ interface BaseLayoutProps {
 
 const BaseLayout: React.FC<BaseLayoutProps> = ({ children, title, navItems, userRole, userName }) => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const { logout } = useAuth();
 
     const handleLogout = () => {
-        localStorage.removeItem('vico_token');
-        window.location.href = '/login';
+        logout();
+        navigate('/login');
     };
 
     return (
@@ -43,22 +46,26 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({ children, title, navItems, user
                 </div>
 
                 <nav className="flex-1 px-4 space-y-1.5">
-                    {navItems.map((item) => (
-                        <button
-                            key={item.path}
-                            onClick={() => navigate(item.path)}
-                            className={`flex items-center gap-3 px-4 py-3.5 w-full rounded-2xl transition-all duration-200 group ${window.location.pathname.startsWith(item.path)
-                                ? 'bg-emerald-50 text-emerald-600 font-semibold shadow-sm shadow-emerald-100'
-                                : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
-                                }`}
-                        >
-                            <span className={`${window.location.pathname.startsWith(item.path) ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600'
-                                }`}>
-                                {item.icon}
-                            </span>
-                            {item.label}
-                        </button>
-                    ))}
+                    {navItems.map((item) => {
+                        const isActive = location.pathname.startsWith(item.path);
+
+                        return (
+                            <button
+                                key={item.path}
+                                onClick={() => navigate(item.path)}
+                                className={`flex items-center gap-3 px-4 py-3.5 w-full rounded-2xl transition-all duration-200 group ${isActive
+                                    ? 'bg-emerald-50 text-emerald-600 font-semibold shadow-sm shadow-emerald-100'
+                                    : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                                    }`}
+                            >
+                                <span className={`${isActive ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600'
+                                    }`}>
+                                    {item.icon}
+                                </span>
+                                {item.label}
+                            </button>
+                        );
+                    })}
                 </nav>
 
                 <div className="p-6 border-t border-slate-100 space-y-1.5">

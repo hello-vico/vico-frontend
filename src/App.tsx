@@ -1,5 +1,5 @@
-import React from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { AuthProvider, useAuth } from './contexts/AuthContext'
 import Landing from './pages/Landing'
 import Login from './pages/Login'
 import AdminDashboard from './pages/admin/AdminDashboard'
@@ -7,66 +7,55 @@ import RestaurantDashboard from './pages/restaurant/RestaurantDashboard'
 import Reservations from './pages/restaurant/Reservations'
 import MenuManagement from './pages/restaurant/MenuManagement'
 
-function App() {
-  // Use state to force re-render when auth state changes
-  const [authState, setAuthState] = React.useState(() => ({
-    isAuthenticated: !!localStorage.getItem('vico_token'),
-    isOwner: localStorage.getItem('vico_user_role') === 'owner'
-  }));
-
-  // Listen for storage changes (for cross-tab sync)
-  React.useEffect(() => {
-    const handleStorageChange = () => {
-      setAuthState({
-        isAuthenticated: !!localStorage.getItem('vico_token'),
-        isOwner: localStorage.getItem('vico_user_role') === 'owner'
-      });
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
-
-  const { isAuthenticated, isOwner } = authState;
+function AppRoutes() {
+  const { isAuthenticated, isOwner } = useAuth();
 
   return (
+    <Routes>
+      <Route path="/" element={<Landing />} />
+      <Route path="/login" element={<Login />} />
+
+      <Route
+        path="/admin/*"
+        element={isAuthenticated ? <AdminDashboard /> : <Navigate to="/login" replace />}
+      />
+
+      <Route
+        path="/restaurant"
+        element={isAuthenticated ? <RestaurantDashboard /> : <Navigate to="/login" replace />}
+      />
+      <Route
+        path="/restaurant/dashboard"
+        element={isAuthenticated ? <RestaurantDashboard /> : <Navigate to="/login" replace />}
+      />
+      <Route
+        path="/restaurant/reservations"
+        element={isAuthenticated ? <Reservations /> : <Navigate to="/login" replace />}
+      />
+      <Route
+        path="/restaurant/menu"
+        element={isAuthenticated ? <MenuManagement /> : <Navigate to="/login" replace />}
+      />
+
+      {/* Redirect generic dashboard to specific one */}
+      <Route
+        path="/dashboard/*"
+        element={
+          isAuthenticated
+            ? (isOwner ? <Navigate to="/restaurant/dashboard" replace /> : <Navigate to="/admin/dashboard" replace />)
+            : <Navigate to="/login" replace />
+        }
+      />
+    </Routes>
+  )
+}
+
+function App() {
+  return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/login" element={<Login />} />
-
-        <Route
-          path="/admin/*"
-          element={isAuthenticated ? <AdminDashboard /> : <Navigate to="/login" replace />}
-        />
-
-        <Route
-          path="/restaurant"
-          element={isAuthenticated ? <RestaurantDashboard /> : <Navigate to="/login" replace />}
-        />
-        <Route
-          path="/restaurant/dashboard"
-          element={isAuthenticated ? <RestaurantDashboard /> : <Navigate to="/login" replace />}
-        />
-        <Route
-          path="/restaurant/reservations"
-          element={isAuthenticated ? <Reservations /> : <Navigate to="/login" replace />}
-        />
-        <Route
-          path="/restaurant/menu"
-          element={isAuthenticated ? <MenuManagement /> : <Navigate to="/login" replace />}
-        />
-
-        {/* Redirect generic dashboard to specific one */}
-        <Route
-          path="/dashboard/*"
-          element={
-            isAuthenticated
-              ? (isOwner ? <Navigate to="/restaurant/dashboard" replace /> : <Navigate to="/admin/dashboard" replace />)
-              : <Navigate to="/login" replace />
-          }
-        />
-      </Routes>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
     </BrowserRouter>
   )
 }
