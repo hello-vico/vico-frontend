@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { LogOut, Settings } from 'lucide-react';
+import { LogOut, Settings, PanelLeft, PanelLeftClose } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
 interface NavItem {
@@ -27,25 +27,29 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({ children, title, navItems, user
         navigate('/login');
     };
 
+    const [isCollapsed, setIsCollapsed] = useState(false);
+
     return (
         <div className="min-h-screen bg-slate-50 flex font-sans">
             {/* Sidebar */}
-            <aside className="w-72 bg-white border-r border-slate-200 hidden md:flex flex-col sticky top-0 h-screen">
-                <div className="p-8">
-                    <div className="flex items-center gap-3 text-[#6366F1] font-bold text-3xl tracking-tight">
-                        <div className="w-10 h-10 rounded-xl bg-brand-gradient flex items-center justify-center text-white shadow-lg shadow-indigo-200">
+            <aside className={`${isCollapsed ? 'w-20' : 'w-72'} bg-white border-r border-slate-200 hidden md:flex flex-col sticky top-0 h-screen transition-all duration-300`}>
+                <div className={`${isCollapsed ? 'p-4' : 'p-8'} flex flex-col items-center`}>
+                    <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-3'} text-[#6366F1] font-bold text-3xl tracking-tight`}>
+                        <div className="w-10 h-10 rounded-xl bg-brand-gradient flex items-center justify-center text-white shadow-lg shadow-indigo-200 flex-shrink-0">
                             V
                         </div>
-                        VICO
+                        {!isCollapsed && 'VICO'}
                     </div>
-                    <div className="mt-2 px-1">
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
-                            {userRole === 'admin' ? 'Amministratore' : 'Ristoratore'}
-                        </span>
-                    </div>
+                    {!isCollapsed && userRole === 'admin' && (
+                        <div className="mt-2 px-1 w-full">
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full block text-center">
+                                {userRole === 'admin' ? 'Amministratore' : ''}
+                            </span>
+                        </div>
+                    )}
                 </div>
 
-                <nav className="flex-1 px-4 space-y-1.5">
+                <nav className={`flex-1 ${isCollapsed ? 'px-2' : 'px-4'} space-y-1.5`}>
                     {navItems.map((item) => {
                         const isActive = location.pathname.startsWith(item.path);
 
@@ -53,7 +57,8 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({ children, title, navItems, user
                             <button
                                 key={item.path}
                                 onClick={() => navigate(item.path)}
-                                className={`flex items-center gap-3 px-4 py-3.5 w-full rounded-2xl transition-all duration-200 group ${isActive
+                                title={isCollapsed ? item.label : undefined}
+                                className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-3 px-4'} py-3.5 w-full rounded-2xl transition-all duration-200 group ${isActive
                                     ? 'bg-indigo-50 text-[#6366F1] font-semibold shadow-sm shadow-indigo-100'
                                     : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
                                     }`}
@@ -62,28 +67,36 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({ children, title, navItems, user
                                     }`}>
                                     {item.icon}
                                 </span>
-                                {item.label}
+                                {!isCollapsed && item.label}
                             </button>
                         );
                     })}
                 </nav>
 
-                <div className="p-6 border-t border-slate-100 space-y-1.5">
-                    <button
+                <div className={`p-6 border-t border-slate-100 space-y-1.5 ${isCollapsed ? 'flex flex-col items-center' : ''}`}>
+                    <button title="Impostazioni"
                         onClick={() =>
                             navigate(userRole === 'admin' ? '/admin/settings' : '/restaurant/settings')
                         }
-                        className="flex items-center gap-3 px-4 py-3 w-full rounded-2xl text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-colors"
+                        className={`flex items-center ${isCollapsed ? 'justify-center px-2' : 'gap-3 px-4'} py-3 w-full rounded-2xl text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-colors`}
                     >
-                        <Settings size={20} className="text-slate-400" />
-                        Impostazioni
+                        <Settings size={20} className="text-slate-400 flex-shrink-0" />
+                        {!isCollapsed && 'Impostazioni'}
+                    </button>
+                    <button title="Logout"
+                        onClick={handleLogout}
+                        className={`flex items-center ${isCollapsed ? 'justify-center px-2' : 'gap-3 px-4'} py-3 w-full rounded-2xl text-red-500 hover:bg-red-50 transition-colors mt-2`}
+                    >
+                        <LogOut size={20} className="flex-shrink-0" />
+                        {!isCollapsed && 'Logout'}
                     </button>
                     <button
-                        onClick={handleLogout}
-                        className="flex items-center gap-3 px-4 py-3 w-full rounded-2xl text-red-500 hover:bg-red-50 transition-colors mt-2"
+                        onClick={() => setIsCollapsed(!isCollapsed)}
+                        className={`flex items-center justify-center ${isCollapsed ? 'w-10 h-10 p-0' : 'w-full px-4 py-3 gap-2'} rounded-2xl bg-slate-100 text-slate-500 hover:bg-indigo-100 hover:text-[#6366F1] transition-all duration-200 mt-4 shadow-sm`}
+                        title={isCollapsed ? 'Espandi menu' : 'Comprimi menu'}
                     >
-                        <LogOut size={20} />
-                        Logout
+                        {isCollapsed ? <PanelLeft size={20} /> : <PanelLeftClose size={20} />}
+                        {!isCollapsed && <span className="text-xs font-medium">Comprimi</span>}
                     </button>
                 </div>
             </aside>
