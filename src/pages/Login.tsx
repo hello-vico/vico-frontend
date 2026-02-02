@@ -15,6 +15,25 @@ const Login: React.FC = () => {
         setError(null);
 
         try {
+            // DEMO MODE: Skip backend call for demo credentials
+            if (u === 'admin' && p === 'password123') {
+                // Simulate successful login
+                const fakeToken = 'demo_token_' + Date.now();
+                localStorage.setItem('vico_token', fakeToken);
+                localStorage.setItem('vico_user_role', 'admin');
+                navigate('/dashboard');
+                return;
+            }
+            
+            if (u === 'owner' && p === 'password123') {
+                const fakeToken = 'demo_token_' + Date.now();
+                localStorage.setItem('vico_token', fakeToken);
+                localStorage.setItem('vico_user_role', 'owner');
+                navigate('/dashboard');
+                return;
+            }
+
+            // Try real backend login for non-demo credentials
             // OAuth2 expects x-www-form-urlencoded
             const params = new URLSearchParams();
             params.append('username', u);
@@ -23,7 +42,7 @@ const Login: React.FC = () => {
             const response = await login(params as any);
             localStorage.setItem('vico_token', response.access_token);
 
-            // DEMO: Set role based on username
+            // Set role based on username
             const role = u.toLowerCase().includes('admin') ? 'admin' : 'owner';
             localStorage.setItem('vico_user_role', role);
 
@@ -128,15 +147,31 @@ const Login: React.FC = () => {
                             </div>
                         </div>
 
-                        <button
-                            type="button"
-                            onClick={handleDemoLogin}
-                            disabled={loading}
-                            className="w-full bg-slate-800/50 hover:bg-slate-800 text-slate-300 font-semibold py-3 rounded-xl border border-slate-700 transition-all flex items-center justify-center gap-2 group"
-                        >
-                            <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                            Demo Credentials
-                        </button>
+<div className="space-y-3">
+                            <button
+                                type="button"
+                                onClick={handleDemoLogin}
+                                disabled={loading}
+                                className="w-full bg-slate-800/50 hover:bg-slate-800 text-slate-300 font-semibold py-3 rounded-xl border border-slate-700 transition-all flex items-center justify-center gap-2 group"
+                            >
+                                <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                                Admin Demo (admin/password123)
+                            </button>
+                            
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setUsername('owner');
+                                    setPassword('password123');
+                                    performLogin('owner', 'password123');
+                                }}
+                                disabled={loading}
+                                className="w-full bg-slate-800/50 hover:bg-slate-800 text-slate-300 font-semibold py-3 rounded-xl border border-slate-700 transition-all flex items-center justify-center gap-2 group"
+                            >
+                                <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                                Owner Demo (owner/password123)
+                            </button>
+                        </div>
                     </form>
 
                     <p className="text-center text-slate-500 text-sm mt-8">
