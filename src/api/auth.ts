@@ -11,11 +11,11 @@ export interface LoginResponse {
     token_type: string;
 }
 
-export const login = async (data: LoginRequest | FormData): Promise<LoginResponse> => {
-    // If the backend expects OAuth2 Password Flow (form-data)
+export const login = async (data: LoginRequest | URLSearchParams): Promise<LoginResponse> => {
+    const isForm = data instanceof URLSearchParams;
     const response = await api.post('/auth/login', data, {
         headers: {
-            'Content-Type': data instanceof FormData ? 'application/x-www-form-urlencoded' : 'application/json'
+            'Content-Type': isForm ? 'application/x-www-form-urlencoded' : 'application/json'
         }
     });
     return response.data;

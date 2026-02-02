@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight, Calendar, Users, BarChart3, MapPin, Phone, Loader2 } from 'lucide-react';
 import { getRistoranti } from '../api/ristoranti';
 import type { Ristorante } from '../types';
@@ -40,9 +41,9 @@ const Landing = () => {
             <div className="hidden md:flex items-center gap-8">
               <a href="#features" className="text-sm font-medium text-slate-400 hover:text-white transition-colors">Features</a>
               <a href="#about" className="text-sm font-medium text-slate-400 hover:text-white transition-colors">About</a>
-              <button className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-sm font-bold rounded-full transition-all duration-300">
+              <Link to="/login" className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-sm font-bold rounded-full transition-all duration-300">
                 Get Started
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -63,13 +64,13 @@ const Landing = () => {
               The all-in-one dashboard designed for modern restaurateurs. Manage bookings, staff, and analytics with seamless efficiency.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button className="w-full sm:w-auto px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl flex items-center justify-center gap-2 transition-all duration-300 shadow-lg shadow-emerald-500/20 group">
+              <Link to="/login" className="w-full sm:w-auto px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl flex items-center justify-center gap-2 transition-all duration-300 shadow-lg shadow-emerald-500/20 group">
                 Try it Free
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
-              <button className="w-full sm:w-auto px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl border border-slate-800 transition-all duration-300">
+              </Link>
+              <Link to="/login" className="w-full sm:w-auto px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl border border-slate-800 transition-all duration-300 flex items-center justify-center">
                 View Demo
-              </button>
+              </Link>
             </div>
           </div>
         </div>

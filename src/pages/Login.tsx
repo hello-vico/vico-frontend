@@ -10,19 +10,23 @@ const Login: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const performLogin = async (u: string, p: string) => {
         setLoading(true);
         setError(null);
 
         try {
-            // Backend expects OAuth2 form data
-            const formData = new FormData();
-            formData.append('username', username);
-            formData.append('password', password);
+            // OAuth2 expects x-www-form-urlencoded
+            const params = new URLSearchParams();
+            params.append('username', u);
+            params.append('password', p);
 
-            const response = await login(formData);
+            const response = await login(params as any);
             localStorage.setItem('vico_token', response.access_token);
+
+            // DEMO: Set role based on username
+            const role = u.toLowerCase().includes('admin') ? 'admin' : 'owner';
+            localStorage.setItem('vico_user_role', role);
+
             navigate('/dashboard');
         } catch (err: any) {
             console.error('Login error:', err);
@@ -30,6 +34,17 @@ const Login: React.FC = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        await performLogin(username, password);
+    };
+
+    const handleDemoLogin = async () => {
+        setUsername('admin');
+        setPassword('password123');
+        await performLogin('admin', 'password123');
     };
 
     return (
@@ -102,6 +117,25 @@ const Login: React.FC = () => {
                             ) : (
                                 'Sign In'
                             )}
+                        </button>
+
+                        <div className="relative py-2">
+                            <div className="absolute inset-0 flex items-center">
+                                <div className="w-full border-t border-slate-800"></div>
+                            </div>
+                            <div className="relative flex justify-center text-xs uppercase">
+                                <span className="bg-slate-900 px-2 text-slate-500">Testing Tools</span>
+                            </div>
+                        </div>
+
+                        <button
+                            type="button"
+                            onClick={handleDemoLogin}
+                            disabled={loading}
+                            className="w-full bg-slate-800/50 hover:bg-slate-800 text-slate-300 font-semibold py-3 rounded-xl border border-slate-700 transition-all flex items-center justify-center gap-2 group"
+                        >
+                            <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                            Demo Credentials
                         </button>
                     </form>
 
