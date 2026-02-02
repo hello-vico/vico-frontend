@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { LogOut, Settings, PanelLeft, PanelLeftClose } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
@@ -17,6 +17,8 @@ interface BaseLayoutProps {
     userName: string;
 }
 
+const SIDEBAR_COLLAPSED_KEY = 'vico-sidebar-collapsed';
+
 const BaseLayout: React.FC<BaseLayoutProps> = ({ children, title, navItems, userRole, userName }) => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -27,7 +29,14 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({ children, title, navItems, user
         navigate('/login');
     };
 
-    const [isCollapsed, setIsCollapsed] = useState(false);
+    const [isCollapsed, setIsCollapsed] = useState(() => {
+        const saved = localStorage.getItem(SIDEBAR_COLLAPSED_KEY);
+        return saved ? JSON.parse(saved) : false;
+    });
+
+    useEffect(() => {
+        localStorage.setItem(SIDEBAR_COLLAPSED_KEY, JSON.stringify(isCollapsed));
+    }, [isCollapsed]);
 
     return (
         <div className="min-h-screen bg-slate-50 flex font-sans">
