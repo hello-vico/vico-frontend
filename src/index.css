@@ -10,6 +10,16 @@
   --animate-bounce-slow: bounce 3s infinite;
 }
 
+
+
+@utility bg-brand-primary {
+  background-color: #6366F1;
+}
+
+@utility bg-brand-secondary {
+  background-color: #11C8DC;
+}
+
 /* Custom Utilities for Gradient */
 @utility bg-brand-gradient {
   background-image: linear-gradient(to right, #6366F1 20%, #11C8DC 80%);

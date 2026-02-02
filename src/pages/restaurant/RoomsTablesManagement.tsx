@@ -346,15 +346,15 @@ const RoomsTablesManagement: React.FC = () => {
                         .map((room) => (
                             <div
                                 key={room.id}
-                                className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 hover:border-emerald-200 hover:shadow-md transition-all"
+                                className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 hover:shadow-md transition-all"
                             >
                                 <div className="flex items-start justify-between gap-4 mb-4">
                                     <div>
                                         <div className="flex items-center gap-2">
                                             <h3 className="text-lg font-bold text-slate-900">{room.name}</h3>
                                             <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide border ${room.isActive
-                                                    ? 'bg-indigo-50 text-[#6366F1] border-indigo-100'
-                                                    : 'bg-slate-100 text-slate-500 border-slate-200'
+                                                ? 'bg-indigo-50 text-[#6366F1] border-indigo-100'
+                                                : 'bg-slate-100 text-slate-500 border-slate-200'
                                                 }`}>
                                                 {room.isActive ? 'Attiva' : 'Disattiva'}
                                             </span>
@@ -376,8 +376,8 @@ const RoomsTablesManagement: React.FC = () => {
                                             type="button"
                                             onClick={() => handleToggleRoomActive(room.id)}
                                             className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-semibold transition-all ${room.isActive
-                                                    ? 'border-indigo-200 bg-indigo-50/60 text-[#6366F1] hover:bg-indigo-50'
-                                                    : 'border-slate-200 bg-white text-slate-500 hover:bg-slate-50'
+                                                ? 'border-indigo-200 bg-indigo-50/60 text-[#6366F1] hover:bg-indigo-50'
+                                                : 'border-slate-200 bg-white text-slate-500 hover:bg-slate-50'
                                                 }`}
                                             title={room.isActive ? 'Disattiva sala' : 'Attiva sala'}
                                         >
