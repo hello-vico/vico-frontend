@@ -51,7 +51,7 @@ const AdminRestaurants: React.FC = () => {
                         setErrorMessage(null);
                         setIsModalOpen(true);
                     }}
-                    className="flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-2xl font-bold hover:bg-emerald-500 transition-all shadow-lg shadow-emerald-200 hover:-translate-y-0.5 active:translate-y-0"
+                    className="flex items-center gap-2 bg-brand-gradient text-white px-6 py-3 rounded-2xl font-bold hover:opacity-90 transition-all shadow-lg shadow-indigo-200 hover:-translate-y-0.5 active:translate-y-0"
                 >
                     <Plus size={20} />
                     Nuovo Ristorante

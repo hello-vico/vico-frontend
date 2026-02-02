@@ -32,8 +32,8 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({ children, title, navItems, user
             {/* Sidebar */}
             <aside className="w-72 bg-white border-r border-slate-200 hidden md:flex flex-col sticky top-0 h-screen">
                 <div className="p-8">
-                    <div className="flex items-center gap-3 text-emerald-600 font-bold text-3xl tracking-tight">
-                        <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-lg shadow-emerald-200">
+                    <div className="flex items-center gap-3 text-[#6366F1] font-bold text-3xl tracking-tight">
+                        <div className="w-10 h-10 rounded-xl bg-brand-gradient flex items-center justify-center text-white shadow-lg shadow-indigo-200">
                             V
                         </div>
                         VICO
@@ -54,11 +54,11 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({ children, title, navItems, user
                                 key={item.path}
                                 onClick={() => navigate(item.path)}
                                 className={`flex items-center gap-3 px-4 py-3.5 w-full rounded-2xl transition-all duration-200 group ${isActive
-                                    ? 'bg-emerald-50 text-emerald-600 font-semibold shadow-sm shadow-emerald-100'
+                                    ? 'bg-indigo-50 text-[#6366F1] font-semibold shadow-sm shadow-indigo-100'
                                     : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
                                     }`}
                             >
-                                <span className={`${isActive ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600'
+                                <span className={`${isActive ? 'text-[#6366F1]' : 'text-slate-400 group-hover:text-slate-600'
                                     }`}>
                                     {item.icon}
                                 </span>
@@ -97,8 +97,8 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({ children, title, navItems, user
                     </div>
                     <div className="flex items-center gap-6">
                         <div className="flex items-center gap-3 bg-slate-50 p-2 pr-4 rounded-2xl border border-slate-100">
-                            <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold border border-emerald-200 shadow-sm overflow-hidden">
-                                <img src={`https://ui-avatars.com/api/?name=${userName}&background=10b981&color=fff`} alt={userName} />
+                            <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center text-[#6366F1] font-bold border border-indigo-200 shadow-sm overflow-hidden">
+                                <img src={`https://ui-avatars.com/api/?name=${userName}&background=6366F1&color=fff`} alt={userName} />
                             </div>
                             <div className="hidden sm:block">
                                 <p className="text-sm font-bold text-slate-900">{userName}</p>

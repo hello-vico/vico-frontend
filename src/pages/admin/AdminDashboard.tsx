@@ -14,7 +14,7 @@ const AdminDashboard: React.FC = () => {
     return (
         <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-                <StatCard title="Total Restaurants" value={ristoranti?.length || 0} icon={<Utensils className="text-emerald-600" />} trend="+2 this month" />
+                <StatCard title="Total Restaurants" value={ristoranti?.length || 0} icon={<Utensils className="text-[#6366F1]" />} trend="+2 this month" />
                 <StatCard title="Total Bookings" value="1,284" icon={<Calendar className="text-blue-600" />} trend="+12% vs last month" />
                 <StatCard title="Active Users" value="842" icon={<Users className="text-purple-600" />} trend="+5% today" />
                 <StatCard title="Revenue Share" value="€4.2k" icon={<TrendingUp className="text-amber-600" />} trend="+8% vs last week" />
@@ -25,7 +25,7 @@ const AdminDashboard: React.FC = () => {
                     <h2 className="text-2xl font-bold text-slate-900">Ristoranti Registrati</h2>
                     <p className="text-slate-500 mt-1">Gestisci e monitora tutti i ristoranti della piattaforma.</p>
                 </div>
-                <button className="flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-2xl font-bold hover:bg-emerald-500 transition-all shadow-lg shadow-emerald-200 hover:-translate-y-0.5 active:translate-y-0">
+                <button className="flex items-center gap-2 bg-brand-gradient text-white px-6 py-3 rounded-2xl font-bold hover:opacity-90 transition-all shadow-lg shadow-indigo-200 hover:-translate-y-0.5 active:translate-y-0">
                     <Plus size={20} />
                     Nuovo Ristorante
                 </button>
@@ -77,7 +77,7 @@ const StatCard: React.FC<{ title: string, value: string | number, icon: React.Re
             <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center">
                 {icon}
             </div>
-            <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg">
+            <span className="text-[10px] font-bold text-[#6366F1] bg-indigo-50 px-2 py-1 rounded-lg">
                 {trend}
             </span>
         </div>

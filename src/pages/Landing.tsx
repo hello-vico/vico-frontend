@@ -13,23 +13,23 @@ import {
 
 const Landing = () => {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-emerald-500/30 overflow-x-hidden font-sans">
+    <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-indigo-500/30 overflow-x-hidden font-sans">
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
+              <div className="w-10 h-10 bg-brand-gradient rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
                 <span className="text-white font-bold text-xl">V</span>
               </div>
               <span className="text-2xl font-bold tracking-tight text-white">VICO</span>
             </div>
             <div className="hidden md:flex items-center gap-8">
-              <a href="#features" className="text-sm font-medium text-slate-400 hover:text-emerald-400 transition-colors">Vantaggi</a>
+              <a href="#features" className="text-sm font-medium text-slate-400 hover:text-[#6366F1] transition-colors">Vantaggi</a>
               <Link to="/login" className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white text-sm font-bold rounded-full border border-slate-700 hover:border-slate-600 transition-all duration-300">
                 Accedi
               </Link>
-              <button className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-sm font-bold rounded-full transition-all duration-300 shadow-lg shadow-emerald-500/20">
+              <button className="px-5 py-2.5 bg-brand-gradient hover:opacity-90 text-slate-950 text-sm font-bold rounded-full transition-all duration-300 shadow-lg shadow-indigo-500/20">
                 Richiedi Demo
               </button>
             </div>
@@ -41,7 +41,7 @@ const Landing = () => {
       <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
         {/* Background Elements */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl z-0 pointer-events-none">
-          <div className="absolute top-20 right-0 w-[500px] h-[500px] bg-emerald-500/20 rounded-full blur-[120px]" />
+          <div className="absolute top-20 right-0 w-[500px] h-[500px] bg-indigo-500/20 rounded-full blur-[120px]" />
           <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px]" />
         </div>
 
@@ -49,13 +49,13 @@ const Landing = () => {
           <div className="flex flex-col lg:flex-row items-center gap-16">
             <div className="flex-1 text-center lg:text-left">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/50 border border-slate-800 mb-8 backdrop-blur-sm">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">AI Receptionist per Ristoranti</span>
+                <span className="w-2 h-2 rounded-full bg-[#6366F1] animate-pulse"></span>
+                <span className="text-xs font-semibold text-[#6366F1] uppercase tracking-wider">AI Receptionist per Ristoranti</span>
               </div>
 
               <h1 className="text-5xl lg:text-7xl font-extrabold tracking-tight mb-6 leading-tight">
                 Lei risponde, <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
+                <span className="text-brand-gradient">
                   tu pensi al resto.
                 </span>
               </h1>
@@ -65,7 +65,7 @@ const Landing = () => {
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                <button className="w-full sm:w-auto px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl flex items-center justify-center gap-2 transition-all duration-300 shadow-xl shadow-emerald-500/20 hover:shadow-emerald-500/40 hover:-translate-y-1">
+                <button className="w-full sm:w-auto px-8 py-4 bg-brand-gradient hover:opacity-90 text-slate-950 font-bold rounded-xl flex items-center justify-center gap-2 transition-all duration-300 shadow-xl shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:-translate-y-1">
                   RICHIEDI DEMO
                   <ArrowRight className="w-5 h-5" />
                 </button>
@@ -73,7 +73,7 @@ const Landing = () => {
                   onClick={() => document.getElementById('demo-section')?.scrollIntoView({ behavior: 'smooth' })}
                   className="w-full sm:w-auto px-8 py-4 bg-slate-900/50 hover:bg-slate-800 text-white font-bold rounded-xl border border-slate-700/50 hover:border-slate-600 backdrop-blur-sm transition-all duration-300 flex items-center justify-center gap-2 group"
                 >
-                  <Play className="w-5 h-5 fill-current text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <Play className="w-5 h-5 fill-current text-slate-400 group-hover:text-[#6366F1] transition-colors" />
                   Guarda come funziona
                 </button>
               </div>
@@ -90,7 +90,7 @@ const Landing = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent" />
                   <div className="relative z-20 text-center p-8">
-                    <p className="text-emerald-400 font-mono text-sm mb-2">Nuova Prenotazione</p>
+                    <p className="text-[#6366F1] font-mono text-sm mb-2">Nuova Prenotazione</p>
                     <h3 className="text-3xl font-bold text-white mb-1">Tavolo 4 • 4 Persone</h3>
                     <p className="text-slate-400 text-sm">Domani, Ore 13:00</p>
                   </div>
@@ -98,8 +98,8 @@ const Landing = () => {
               </div>
               {/* Floating Badge */}
               <div className="absolute -bottom-6 -left-6 z-20 bg-slate-800/90 backdrop-blur-md border border-slate-700 p-4 rounded-xl shadow-xl flex items-center gap-3 animate-bounce-slow">
-                <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center">
-                  <CheckCircle2 className="w-5 h-5 text-green-500" />
+                <div className="w-10 h-10 bg-indigo-500/20 rounded-full flex items-center justify-center">
+                  <CheckCircle2 className="w-5 h-5 text-[#6366F1]" />
                 </div>
                 <div>
                   <p className="text-xs text-slate-400 font-medium">Stato Prenotazione</p>
@@ -121,14 +121,14 @@ const Landing = () => {
           <p className="text-lg text-slate-400 mb-12 max-w-2xl mx-auto">
             Simula una finta prenotazione per provare te stesso le funzionalità.
             <br />
-            <span className="text-emerald-400 italic">"prenota un tavolo per 4 persone domani alle 13.00"</span>
+            <span className="text-[#6366F1] italic">"prenota un tavolo per 4 persone domani alle 13.00"</span>
           </p>
 
           <div className="bg-slate-950 rounded-3xl border border-slate-800 p-8 shadow-2xl relative max-w-sm mx-auto group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-[2rem] opacity-20 group-hover:opacity-40 blur transition-opacity duration-500"></div>
+            <div className="absolute -inset-1 bg-brand-gradient rounded-[2rem] opacity-20 group-hover:opacity-40 blur transition-opacity duration-500"></div>
             <div className="relative flex flex-col items-center">
-              <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mb-6 ring-4 ring-emerald-500/10 animate-[pulse_3s_infinite]">
-                <Smartphone className="w-10 h-10 text-emerald-500" />
+              <div className="w-20 h-20 bg-indigo-500/10 rounded-full flex items-center justify-center mb-6 ring-4 ring-indigo-500/10 animate-[pulse_3s_infinite]">
+                <Smartphone className="w-10 h-10 text-[#6366F1]" />
               </div>
               <h3 className="text-2xl font-bold text-white mb-2">Chiama Vico</h3>
               <p className="text-slate-500 text-sm mb-8">Prova la demo interattiva</p>
@@ -148,7 +148,7 @@ const Landing = () => {
           <div className="text-center mb-20">
             <h2 className="text-4xl font-bold mb-4">
               Alcuni vantaggi che <br className="hidden md:block" />
-              <span className="text-emerald-500">miglioreranno il tuo modo di lavorare</span>
+              <span className="text-[#6366F1]">miglioreranno il tuo modo di lavorare</span>
             </h2>
           </div>
 
@@ -172,7 +172,7 @@ const Landing = () => {
               color="amber"
             />
             <AdvantageCard
-              icon={<CheckCircle2 className="w-6 h-6 text-emerald-400" />}
+              icon={<CheckCircle2 className="w-6 h-6 text-[#6366F1]" />}
               title="Miglior Esperienza"
               description="Un servizio telefonico sempre cortese ed efficace, che riflette l'immagine professionale del tuo locale."
               color="emerald"
@@ -211,7 +211,7 @@ const Landing = () => {
               <ul className="space-y-4 mb-8">
                 {['Sincronizzazione istantanea', 'Accessibile da mobile e desktop', 'Statistiche dettagliate'].map((item, i) => (
                   <li key={i} className="flex items-center gap-3 text-slate-300">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-[#6366F1] flex-shrink-0" />
                     {item}
                   </li>
                 ))}
@@ -253,7 +253,7 @@ const Landing = () => {
 
       {/* Final CTA */}
       <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-emerald-900/10"></div>
+        <div className="absolute inset-0 bg-indigo-900/10"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-950/80 to-slate-950"></div>
 
         <div className="max-w-4xl mx-auto px-4 relative z-10 text-center">
@@ -266,7 +266,7 @@ const Landing = () => {
             <span className="px-4 py-2 bg-slate-800 rounded-full text-slate-300 text-sm font-semibold border border-slate-700">MASSIMIZZA I COPERTI</span>
           </div>
 
-          <button className="px-10 py-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-lg font-bold rounded-2xl transition-all duration-300 shadow-xl shadow-emerald-500/20 hover:scale-105">
+          <button className="px-10 py-5 bg-brand-gradient hover:opacity-90 text-slate-950 text-lg font-bold rounded-2xl transition-all duration-300 shadow-xl shadow-indigo-500/20 hover:scale-105">
             RICHIEDI DEMO GRATUITA
           </button>
           <p className="mt-6 text-slate-500 text-sm">*Nessuna carta di credito richiesta per iniziare</p>
@@ -297,7 +297,7 @@ const AdvantageCard = ({ icon, title, description, color }: { icon: React.ReactN
     rose: 'group-hover:border-rose-500/50 hover:shadow-rose-500/10',
     cyan: 'group-hover:border-cyan-500/50 hover:shadow-cyan-500/10',
     amber: 'group-hover:border-amber-500/50 hover:shadow-amber-500/10',
-    emerald: 'group-hover:border-emerald-500/50 hover:shadow-emerald-500/10'
+    emerald: 'group-hover:border-indigo-500/50 hover:shadow-indigo-500/10'
   };
 
   return (
@@ -312,8 +312,8 @@ const AdvantageCard = ({ icon, title, description, color }: { icon: React.ReactN
 };
 
 const StepCard = ({ number, title, description }: { number: string, title: string, description: string }) => (
-  <div className="relative p-8 bg-slate-900 border border-slate-800 rounded-2xl text-left hover:border-emerald-500/30 transition-colors group">
-    <span className="absolute top-4 right-4 text-4xl font-black text-slate-800 group-hover:text-emerald-500/10 transition-colors select-none">
+  <div className="relative p-8 bg-slate-900 border border-slate-800 rounded-2xl text-left hover:border-indigo-500/30 transition-colors group">
+    <span className="absolute top-4 right-4 text-4xl font-black text-slate-800 group-hover:text-indigo-500/10 transition-colors select-none">
       {number}
     </span>
     <h3 className="text-xl font-bold text-white mb-2 relative z-10">{title}</h3>

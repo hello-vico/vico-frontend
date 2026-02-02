@@ -21,7 +21,7 @@ const AdminUsers: React.FC = () => {
 
             <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
                 <div className="p-6 border-b border-slate-50 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                    <div className="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#6366F1]">
                         <Users size={20} />
                     </div>
                     <div>
@@ -47,7 +47,7 @@ const AdminUsers: React.FC = () => {
                                 </div>
                             </div>
                             <div className="flex items-center gap-3">
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100 flex items-center gap-1">
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-[#6366F1] bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-100 flex items-center gap-1">
                                     <ShieldCheck size={10} /> {user.role}
                                 </span>
                             </div>

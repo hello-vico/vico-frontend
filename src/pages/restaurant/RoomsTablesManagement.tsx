@@ -285,7 +285,7 @@ const RoomsTablesManagement: React.FC = () => {
             <div className="flex items-center justify-between mb-8">
                 <div>
                     <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                        <LayoutGrid size={20} className="text-emerald-600" />
+                        <LayoutGrid size={20} className="text-[#6366F1]" />
                         Configurazione sale e tavoli
                     </h2>
                     <p className="text-slate-500 text-sm mt-0.5">
@@ -296,7 +296,7 @@ const RoomsTablesManagement: React.FC = () => {
                     <button
                         type="button"
                         onClick={openCreateRoom}
-                        className="flex items-center gap-2 bg-emerald-600 text-white px-5 py-2.5 rounded-2xl font-bold text-sm hover:bg-emerald-500 transition-all shadow-lg shadow-emerald-200"
+                        className="flex items-center gap-2 bg-brand-gradient text-white px-5 py-2.5 rounded-2xl font-bold text-sm hover:opacity-90 transition-all shadow-lg shadow-indigo-200"
                     >
                         <Plus size={18} />
                         Nuova sala
@@ -323,10 +323,10 @@ const RoomsTablesManagement: React.FC = () => {
                                 type="button"
                                 onClick={() => setSelectedRoomId(room.id)}
                                 className={`relative px-4 py-2 rounded-2xl text-xs font-semibold border transition-all ${selectedRoom && selectedRoom.id === room.id
-                                        ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
-                                        : room.isActive
-                                            ? 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
-                                            : 'bg-slate-100 text-slate-400 border-slate-200 opacity-70'
+                                    ? 'bg-[#6366F1] text-white border-[#6366F1] shadow-sm'
+                                    : room.isActive
+                                        ? 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                                        : 'bg-slate-100 text-slate-400 border-slate-200 opacity-70'
                                     }`}
                             >
                                 <span className="flex items-center gap-2">
@@ -349,38 +349,36 @@ const RoomsTablesManagement: React.FC = () => {
                                 className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 hover:border-emerald-200 hover:shadow-md transition-all"
                             >
                                 <div className="flex items-start justify-between gap-4 mb-4">
-                                <div>
-                                    <div className="flex items-center gap-2">
-                                        <h3 className="text-lg font-bold text-slate-900">{room.name}</h3>
-                                        <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide border ${
-                                            room.isActive
-                                                ? 'bg-emerald-50 text-emerald-700 border-emerald-100'
-                                                : 'bg-slate-100 text-slate-500 border-slate-200'
-                                        }`}>
-                                            {room.isActive ? 'Attiva' : 'Disattiva'}
-                                        </span>
+                                    <div>
+                                        <div className="flex items-center gap-2">
+                                            <h3 className="text-lg font-bold text-slate-900">{room.name}</h3>
+                                            <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide border ${room.isActive
+                                                    ? 'bg-indigo-50 text-[#6366F1] border-indigo-100'
+                                                    : 'bg-slate-100 text-slate-500 border-slate-200'
+                                                }`}>
+                                                {room.isActive ? 'Attiva' : 'Disattiva'}
+                                            </span>
+                                        </div>
+                                        <p className="text-xs text-slate-500 mt-1 max-w-md">{room.description}</p>
+                                        <p className="text-xs font-semibold text-slate-500 mt-2">
+                                            Capacità stimata:{' '}
+                                            <span className="text-slate-900">
+                                                {room.capacity} coperti
+                                            </span>
+                                            {' '}• Tavoli configurati:{' '}
+                                            <span className="text-slate-900">
+                                                {room.tables.length}
+                                            </span>
+                                        </p>
                                     </div>
-                                    <p className="text-xs text-slate-500 mt-1 max-w-md">{room.description}</p>
-                                    <p className="text-xs font-semibold text-slate-500 mt-2">
-                                        Capacità stimata:{' '}
-                                        <span className="text-slate-900">
-                                            {room.capacity} coperti
-                                        </span>
-                                        {' '}• Tavoli configurati:{' '}
-                                        <span className="text-slate-900">
-                                            {room.tables.length}
-                                        </span>
-                                    </p>
-                                </div>
                                     <div className="flex items-center gap-2">
                                         <button
                                             type="button"
                                             onClick={() => handleToggleRoomActive(room.id)}
-                                            className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-semibold transition-all ${
-                                                room.isActive
-                                                    ? 'border-emerald-200 bg-emerald-50/60 text-emerald-700 hover:bg-emerald-50'
+                                            className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-semibold transition-all ${room.isActive
+                                                    ? 'border-indigo-200 bg-indigo-50/60 text-[#6366F1] hover:bg-indigo-50'
                                                     : 'border-slate-200 bg-white text-slate-500 hover:bg-slate-50'
-                                            }`}
+                                                }`}
                                             title={room.isActive ? 'Disattiva sala' : 'Attiva sala'}
                                         >
                                             <Power size={14} />
@@ -411,18 +409,18 @@ const RoomsTablesManagement: React.FC = () => {
                                             key={table.id}
                                             type="button"
                                             onClick={() => openEditTable(room.id, table)}
-                                            className="group bg-slate-50 rounded-2xl border border-slate-100 px-4 py-3 flex flex-col items-start gap-1 text-left hover:bg-emerald-50/60 hover:border-emerald-200 transition-all"
+                                            className="group bg-slate-50 rounded-2xl border border-slate-100 px-4 py-3 flex flex-col items-start gap-1 text-left hover:bg-indigo-50/60 hover:border-indigo-200 transition-all"
                                         >
                                             <div className="flex items-center justify-between w-full gap-2">
                                                 <span className="text-sm font-bold text-slate-900">{table.name}</span>
                                                 <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-500">
-                                                    <Users size={12} className="text-slate-400 group-hover:text-emerald-600" />
+                                                    <Users size={12} className="text-slate-400 group-hover:text-[#6366F1]" />
                                                     {table.seats}
                                                 </span>
                                             </div>
                                             <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide
                                             ${table.status === 'available'
-                                                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-100'
+                                                    ? 'bg-indigo-50 text-[#6366F1] border border-indigo-100'
                                                     : table.status === 'reserved'
                                                         ? 'bg-amber-50 text-amber-700 border border-amber-100'
                                                         : 'bg-red-50 text-red-700 border border-red-100'
@@ -438,7 +436,7 @@ const RoomsTablesManagement: React.FC = () => {
                                     <button
                                         type="button"
                                         onClick={() => openCreateTable(room.id)}
-                                        className="border border-dashed border-slate-200 rounded-2xl px-4 py-3 text-xs font-semibold text-slate-500 hover:border-emerald-300 hover:bg-emerald-50/40 hover:text-emerald-700 flex items-center justify-center gap-2 transition-all"
+                                        className="border border-dashed border-slate-200 rounded-2xl px-4 py-3 text-xs font-semibold text-slate-500 hover:border-indigo-300 hover:bg-indigo-50/40 hover:text-[#6366F1] flex items-center justify-center gap-2 transition-all"
                                     >
                                         <Plus size={14} />
                                         Aggiungi tavolo
@@ -472,7 +470,7 @@ const RoomsTablesManagement: React.FC = () => {
                                         type="text"
                                         value={roomForm.name}
                                         onChange={(e) => handleChangeRoomField('name', e.target.value)}
-                                        className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500"
+                                        className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-[#6366F1]"
                                         placeholder="Es. Sala Principale"
                                     />
                                 </div>
@@ -485,7 +483,7 @@ const RoomsTablesManagement: React.FC = () => {
                                         rows={3}
                                         value={roomForm.description}
                                         onChange={(e) => handleChangeRoomField('description', e.target.value)}
-                                        className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 resize-none"
+                                        className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-[#6366F1] resize-none"
                                         placeholder="Es. Sala luminosa all'ingresso, ideale per il servizio quotidiano."
                                     />
                                 </div>
@@ -499,7 +497,7 @@ const RoomsTablesManagement: React.FC = () => {
                                         min={1}
                                         value={roomForm.capacity}
                                         onChange={(e) => handleChangeRoomField('capacity', e.target.value)}
-                                        className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500"
+                                        className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-[#6366F1]"
                                     />
                                 </div>
                             </div>
@@ -515,7 +513,7 @@ const RoomsTablesManagement: React.FC = () => {
                                 <button
                                     type="button"
                                     onClick={handleSaveRoom}
-                                    className="inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-500 shadow-sm"
+                                    className="inline-flex items-center gap-2 rounded-2xl bg-brand-gradient px-4 py-2 text-xs font-semibold text-white hover:opacity-90 shadow-sm"
                                 >
                                     Salva sala
                                 </button>
@@ -525,7 +523,7 @@ const RoomsTablesManagement: React.FC = () => {
 
                     {/* Pannello laterale: form tavolo */}
                     {showTableDrawer && (
-                        <div className="bg-white rounded-3xl border border-emerald-200 shadow-lg p-6 space-y-4">
+                        <div className="bg-white rounded-3xl border border-indigo-200 shadow-lg p-6 space-y-4">
                             <div className="flex items-start justify-between gap-3">
                                 <div>
                                     <h3 className="text-sm font-bold text-slate-900">
@@ -548,7 +546,7 @@ const RoomsTablesManagement: React.FC = () => {
                                         type="text"
                                         value={tableForm.name}
                                         onChange={(e) => handleChangeTableField('name', e.target.value)}
-                                        className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500"
+                                        className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-[#6366F1]"
                                         placeholder="Es. T-05"
                                     />
                                 </div>
@@ -562,7 +560,7 @@ const RoomsTablesManagement: React.FC = () => {
                                         min={1}
                                         value={tableForm.seats}
                                         onChange={(e) => handleChangeTableField('seats', e.target.value)}
-                                        className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500"
+                                        className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-[#6366F1]"
                                     />
                                 </div>
 
@@ -575,7 +573,7 @@ const RoomsTablesManagement: React.FC = () => {
                                             type="button"
                                             onClick={() => handleChangeTableField('status', 'available')}
                                             className={`flex-1 px-3 py-2 rounded-xl text-xs font-semibold border ${tableForm.status === 'available'
-                                                ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                                                ? 'bg-indigo-50 text-[#6366F1] border-indigo-300'
                                                 : 'bg-white text-slate-600 border-slate-200'
                                                 }`}
                                         >
@@ -616,7 +614,7 @@ const RoomsTablesManagement: React.FC = () => {
                                 <button
                                     type="button"
                                     onClick={handleSaveTable}
-                                    className="inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-500 shadow-sm"
+                                    className="inline-flex items-center gap-2 rounded-2xl bg-brand-gradient px-4 py-2 text-xs font-semibold text-white hover:opacity-90 shadow-sm"
                                 >
                                     Salva tavolo
                                 </button>

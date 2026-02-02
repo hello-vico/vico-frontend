@@ -93,13 +93,13 @@ const Reservations: React.FC = () => {
             <div className="flex flex-col gap-6 mb-8">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="flex-1 flex flex-col gap-2">
-                        <span className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-500">
+                        <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6366F1]">
                             Data prenotazioni
                         </span>
                         <div className="flex items-center gap-3">
                             <button
                                 onClick={() => changeDay(-1)}
-                                className="w-9 h-9 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50 hover:text-emerald-600 transition-colors"
+                                className="w-9 h-9 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50 hover:text-[#6366F1] transition-colors"
                                 aria-label="Giorno precedente"
                             >
                                 <ChevronLeft size={18} />
@@ -114,7 +114,7 @@ const Reservations: React.FC = () => {
                             </div>
                             <button
                                 onClick={() => changeDay(1)}
-                                className="w-9 h-9 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50 hover:text-emerald-600 transition-colors"
+                                className="w-9 h-9 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50 hover:text-[#6366F1] transition-colors"
                                 aria-label="Giorno successivo"
                             >
                                 <ChevronRight size={18} />
@@ -159,7 +159,7 @@ const Reservations: React.FC = () => {
                                 type="date"
                                 value={dateInputValue}
                                 onChange={handleDateInputChange}
-                                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/60"
+                                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-[#6366F1]/60"
                             />
                             <p className="mt-2 text-[11px] text-slate-400">
                                 In futuro questa data filtrerà le prenotazioni reali del tuo gestionale.
@@ -178,10 +178,10 @@ const Reservations: React.FC = () => {
                                 className={[
                                     'flex flex-col items-center justify-center px-3 py-2 rounded-2xl border text-xs font-semibold transition-all min-w-[64px]',
                                     day.isSelected
-                                        ? 'bg-emerald-500 text-white border-emerald-500 shadow-sm'
+                                        ? 'bg-[#6366F1] text-white border-[#6366F1] shadow-sm'
                                         : day.isToday
-                                        ? 'bg-emerald-50 text-emerald-700 border-emerald-100'
-                                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50',
+                                            ? 'bg-indigo-50 text-[#6366F1] border-indigo-100'
+                                            : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50',
                                 ].join(' ')}
                             >
                                 <span className="uppercase tracking-[0.12em]">
@@ -202,7 +202,7 @@ const Reservations: React.FC = () => {
                         <input
                             type="text"
                             placeholder="Cerca per nome o telefono..."
-                            className="w-full bg-white border border-slate-200 rounded-2xl py-3 pl-12 pr-4 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 transition-all font-medium"
+                            className="w-full bg-white border border-slate-200 rounded-2xl py-3 pl-12 pr-4 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-[#6366F1]/50 transition-all font-medium"
                         />
                     </div>
                     <div className="flex items-center gap-3 md:hidden">
@@ -229,7 +229,7 @@ const Reservations: React.FC = () => {
                                     {res.name[0]}
                                 </div>
                                 <div>
-                                    <p className="font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">
+                                    <p className="font-bold text-slate-900 group-hover:text-[#6366F1] transition-colors">
                                         {res.name}
                                     </p>
                                     <p className="text-xs text-slate-500">{res.phone}</p>
@@ -270,7 +270,7 @@ const Reservations: React.FC = () => {
                         <div className="flex items-center justify-between pt-1">
                             <div>
                                 {res.status === 'confirmed' && (
-                                    <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100 inline-flex items-center gap-1">
+                                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#6366F1] bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-100 inline-flex items-center gap-1">
                                         <CheckCircle2 size={10} /> Confermato
                                     </span>
                                 )}
@@ -285,7 +285,7 @@ const Reservations: React.FC = () => {
                                     </span>
                                 )}
                             </div>
-                            <button className="text-xs font-semibold text-emerald-700 hover:text-emerald-800">
+                            <button className="text-xs font-semibold text-[#6366F1] hover:text-indigo-800">
                                 Dettagli
                             </button>
                         </div>

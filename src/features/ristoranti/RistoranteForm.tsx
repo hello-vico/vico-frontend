@@ -51,7 +51,7 @@ export const RistoranteForm: React.FC<RistoranteFormProps> = ({
                         value={values.nome}
                         onChange={handleChange}
                         required
-                        className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-[#6366F1] text-sm"
                         placeholder="Es. Trattoria da Mario"
                     />
                 </div>
@@ -63,7 +63,7 @@ export const RistoranteForm: React.FC<RistoranteFormProps> = ({
                         value={values.telefono}
                         onChange={handleChange}
                         required
-                        className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-[#6366F1] text-sm"
                         placeholder="+39 ..."
                     />
                 </div>
@@ -77,7 +77,7 @@ export const RistoranteForm: React.FC<RistoranteFormProps> = ({
                     value={values.indirizzo}
                     onChange={handleChange}
                     required
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-[#6366F1] text-sm"
                     placeholder="Via Roma 10, Milano"
                 />
             </div>
@@ -91,7 +91,7 @@ export const RistoranteForm: React.FC<RistoranteFormProps> = ({
                         value={values.p_iva}
                         onChange={handleChange}
                         required
-                        className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-[#6366F1] text-sm"
                         placeholder="IT00000000000"
                     />
                 </div>
@@ -105,7 +105,7 @@ export const RistoranteForm: React.FC<RistoranteFormProps> = ({
                         min={15}
                         step={15}
                         required
-                        className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-[#6366F1] text-sm"
                     />
                 </div>
             </div>
@@ -121,7 +121,7 @@ export const RistoranteForm: React.FC<RistoranteFormProps> = ({
                 </button>
                 <button
                     type="submit"
-                    className="px-5 py-2 rounded-xl bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-500 shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="px-5 py-2 rounded-xl bg-brand-gradient text-white text-sm font-semibold hover:opacity-90 shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
                     disabled={isSubmitting}
                 >
                     {isSubmitting ? 'Salvataggio...' : 'Salva ristorante'}

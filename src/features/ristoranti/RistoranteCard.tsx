@@ -14,7 +14,7 @@ export const RistoranteCard: React.FC<RistoranteCardProps> = ({ ristorante, onMa
                 <h3 className="text-xl font-semibold text-slate-800 group-hover:text-brand-primary transition-colors">
                     {ristorante.nome}
                 </h3>
-                <span className={`px-2 py-1 rounded-full text-xs font-medium ${ristorante.is_active ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-50 text-slate-500'}`}>
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${ristorante.is_active ? 'bg-indigo-50 text-[#6366F1]' : 'bg-slate-50 text-slate-500'}`}>
                     {ristorante.is_active ? 'Attivo' : 'Inattivo'}
                 </span>
             </div>

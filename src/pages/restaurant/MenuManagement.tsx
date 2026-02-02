@@ -26,10 +26,10 @@ const MenuManagement: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-3">
                     <div className="bg-slate-100 p-1 rounded-xl flex items-center mr-2">
-                        <button className="p-2 bg-white rounded-lg shadow-sm text-emerald-600"><LayoutGrid size={18} /></button>
+                        <button className="p-2 bg-white rounded-lg shadow-sm text-[#6366F1]"><LayoutGrid size={18} /></button>
                         <button className="p-2 text-slate-400"><List size={18} /></button>
                     </div>
-                    <button className="flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-2xl font-bold hover:bg-emerald-500 transition-all shadow-lg shadow-emerald-200">
+                    <button className="flex items-center gap-2 bg-brand-gradient text-white px-6 py-3 rounded-2xl font-bold hover:opacity-90 transition-all shadow-lg shadow-indigo-200">
                         <Plus size={20} /> Nuovo Piatto
                     </button>
                 </div>
@@ -37,9 +37,9 @@ const MenuManagement: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
                 {categories.map(cat => (
-                    <button key={cat.id} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:border-emerald-200 hover:bg-emerald-50/10 transition-all text-left group">
-                        <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center mb-4 group-hover:bg-emerald-100 transition-colors">
-                            <Tag size={20} className="text-slate-400 group-hover:text-emerald-600" />
+                    <button key={cat.id} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:border-indigo-200 hover:bg-indigo-50/10 transition-all text-left group">
+                        <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center mb-4 group-hover:bg-indigo-100 transition-colors">
+                            <Tag size={20} className="text-slate-400 group-hover:text-[#6366F1]" />
                         </div>
                         <h3 className="font-bold text-slate-900">{cat.name}</h3>
                         <p className="text-xs text-slate-500 mt-1">{cat.count} piatti registrati</p>
@@ -53,7 +53,7 @@ const MenuManagement: React.FC = () => {
                 </div>
                 <h3 className="text-xl font-bold text-slate-800 mb-2">Seleziona una categoria</h3>
                 <p className="text-slate-500 max-w-sm mx-auto">Scegli una categoria a sinistra per visualizzare i piatti o inizia aggiungendo un nuovo piatto al tuo menu.</p>
-                <button className="mt-8 text-emerald-600 font-bold hover:underline">Guida alla gestione menu</button>
+                <button className="mt-8 text-[#6366F1] font-bold hover:underline">Guida alla gestione menu</button>
             </div>
         </BaseLayout>
     );

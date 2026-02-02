@@ -13,7 +13,7 @@ const RestaurantDashboard: React.FC = () => {
             userName="Luigi's Pasta"
         >
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-                <StatCard title="Today's Bookings" value="12" icon={<Calendar className="text-emerald-600" />} trend="4 pending" />
+                <StatCard title="Today's Bookings" value="12" icon={<Calendar className="text-[#6366F1]" />} trend="4 pending" />
                 <StatCard title="Total Covers" value="48" icon={<Users className="text-blue-600" />} trend="+15% vs yesterday" />
                 <StatCard title="Average Rating" value="4.8" icon={<Clock className="text-amber-600" />} trend="2 new reviews" />
                 <StatCard title="Revenue (Today)" value="€1,240" icon={<TrendingUp className="text-purple-600" />} trend="+22% vs last Mon" />
@@ -27,7 +27,7 @@ const RestaurantDashboard: React.FC = () => {
                             <h2 className="text-xl font-bold text-slate-900">Prossime Prenotazioni</h2>
                             <p className="text-slate-500 text-sm mt-0.5">Le prossime prenotazioni in arrivo oggi.</p>
                         </div>
-                        <button className="text-emerald-600 font-bold text-sm flex items-center gap-1 hover:gap-2 transition-all">
+                        <button className="text-[#6366F1] font-bold text-sm flex items-center gap-1 hover:gap-2 transition-all">
                             Vedi tutte <ChevronRight size={16} />
                         </button>
                     </div>
@@ -41,13 +41,13 @@ const RestaurantDashboard: React.FC = () => {
 
                 {/* Quick Actions / Stats */}
                 <div className="space-y-8">
-                    <div className="bg-emerald-600 rounded-3xl p-8 text-white shadow-xl shadow-emerald-100 relative overflow-hidden">
+                    <div className="bg-brand-gradient rounded-3xl p-8 text-white shadow-xl shadow-indigo-100 relative overflow-hidden">
                         <div className="relative z-10">
                             <h3 className="text-lg font-bold mb-2">Stato Servizio</h3>
-                            <p className="text-emerald-100/80 text-sm mb-6">Il ristorante è attualmente aperto e accetta prenotazioni online.</p>
+                            <p className="text-indigo-100/80 text-sm mb-6">Il ristorante è attualmente aperto e accetta prenotazioni online.</p>
                             <div className="flex items-center gap-3">
-                                <button className="bg-white text-emerald-600 px-4 py-2 rounded-xl font-bold text-sm">Pausa Pranzo</button>
-                                <button className="bg-emerald-500 text-white px-4 py-2 rounded-xl font-bold text-sm border border-emerald-400">Chiudi</button>
+                                <button className="bg-white text-[#6366F1] px-4 py-2 rounded-xl font-bold text-sm">Pausa Pranzo</button>
+                                <button className="bg-white/20 backdrop-blur-md text-white px-4 py-2 rounded-xl font-bold text-sm border border-white/30 hover:bg-white/30 transition-colors">Chiudi</button>
                             </div>
                         </div>
                         <div className="absolute top-[-20%] right-[-10%] w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
@@ -97,7 +97,7 @@ const ReservationItem: React.FC<{ name: string, time: string, guests: number, st
         </div>
         <div className="flex items-center gap-3">
             {status === 'confirmed' ? (
-                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100 flex items-center gap-1">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#6366F1] bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-100 flex items-center gap-1">
                     <CheckCircle2 size={10} /> Confermato
                 </span>
             ) : (

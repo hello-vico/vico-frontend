@@ -110,14 +110,14 @@ const RestaurantSettings: React.FC = () => {
                         <div className="flex items-center justify-between gap-4 mb-2">
                             <div>
                                 <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                                    <Utensils size={18} className="text-emerald-600" />
+                                    <Utensils size={18} className="text-[#6366F1]" />
                                     Dati ristorante
                                 </h2>
                                 <p className="text-sm text-slate-500">
                                     Informazioni visibili ai clienti sulle pagine di prenotazione.
                                 </p>
                             </div>
-                            <button className="inline-flex items-center gap-2 rounded-2xl bg-emerald-600 text-white text-sm font-semibold px-4 py-2 hover:bg-emerald-500 shadow-sm">
+                            <button className="inline-flex items-center gap-2 rounded-2xl bg-brand-gradient text-white text-sm font-semibold px-4 py-2 hover:opacity-90 shadow-sm">
                                 <Save size={16} />
                                 Salva modifiche
                             </button>
@@ -162,7 +162,7 @@ const RestaurantSettings: React.FC = () => {
                         <div className="flex items-center justify-between gap-4 mb-1">
                             <div>
                                 <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                                    <CalendarClock size={18} className="text-emerald-600" />
+                                    <CalendarClock size={18} className="text-[#6366F1]" />
                                     Orari di apertura
                                 </h2>
                                 <p className="text-sm text-slate-500">
@@ -186,7 +186,7 @@ const RestaurantSettings: React.FC = () => {
                                 <button
                                     type="button"
                                     onClick={copyMondayToAll}
-                                    className="px-3 py-1.5 rounded-2xl border border-emerald-200 bg-emerald-50 text-[11px] font-semibold text-emerald-700 hover:bg-emerald-100"
+                                    className="px-3 py-1.5 rounded-2xl border border-indigo-200 bg-indigo-50 text-[11px] font-semibold text-[#6366F1] hover:bg-indigo-100"
                                 >
                                     Copia Lunedì su tutti i giorni
                                 </button>
@@ -197,9 +197,8 @@ const RestaurantSettings: React.FC = () => {
                             {dayLabels.map((day, idx) => (
                                 <div
                                     key={day.key}
-                                    className={`flex flex-col gap-3 px-4 md:px-6 py-3 text-sm ${
-                                        idx !== 6 ? 'border-b border-slate-50' : ''
-                                    } bg-white`}
+                                    className={`flex flex-col gap-3 px-4 md:px-6 py-3 text-sm ${idx !== 6 ? 'border-b border-slate-50' : ''
+                                        } bg-white`}
                                 >
                                     <div className="flex items-center justify-between gap-3">
                                         <div className="flex-1 font-medium text-slate-800">{day.label}</div>
@@ -208,16 +207,15 @@ const RestaurantSettings: React.FC = () => {
                                                 type="checkbox"
                                                 checked={schedule[day.key].open}
                                                 onChange={(e) => handleToggleOpen(day.key, e.target.checked)}
-                                                className="h-4 w-4 rounded border-slate-300 text-emerald-600"
+                                                className="h-4 w-4 rounded border-slate-300 text-[#6366F1]"
                                             />
                                             Aperto
                                         </label>
                                     </div>
 
                                     <div
-                                        className={`grid grid-cols-1 md:grid-cols-2 gap-3 pl-0 md:pl-6 text-xs text-slate-600 ${
-                                            !schedule[day.key].open ? 'opacity-60' : ''
-                                        }`}
+                                        className={`grid grid-cols-1 md:grid-cols-2 gap-3 pl-0 md:pl-6 text-xs text-slate-600 ${!schedule[day.key].open ? 'opacity-60' : ''
+                                            }`}
                                     >
                                         <div className="flex flex-wrap items-center gap-2">
                                             <span className="font-semibold text-slate-700">Pranzo</span>
@@ -280,7 +278,7 @@ const RestaurantSettings: React.FC = () => {
                 <div className="space-y-6">
                     <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-4">
                         <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                            <Globe size={16} className="text-emerald-600" />
+                            <Globe size={16} className="text-[#6366F1]" />
                             Prenotazioni online
                         </h3>
                         <p className="text-xs text-slate-500">
@@ -292,7 +290,7 @@ const RestaurantSettings: React.FC = () => {
                                 <p className="text-sm font-medium text-slate-800">Accetta prenotazioni online</p>
                                 <p className="text-xs text-slate-500">Mostra il tuo ristorante come &quot;Disponibile&quot; su VICO.</p>
                             </div>
-                            <button className="relative inline-flex h-7 w-12 items-center rounded-full bg-emerald-500 transition-colors">
+                            <button className="relative inline-flex h-7 w-12 items-center rounded-full bg-[#6366F1] transition-colors">
                                 <span className="inline-block h-5 w-5 translate-x-6 rounded-full bg-white shadow-sm transition-transform" />
                             </button>
                         </div>
@@ -313,7 +311,7 @@ const RestaurantSettings: React.FC = () => {
 
                     <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-4">
                         <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                            <Bell size={16} className="text-emerald-600" />
+                            <Bell size={16} className="text-[#6366F1]" />
                             Notifiche
                         </h3>
                         <p className="text-xs text-slate-500">
@@ -322,14 +320,14 @@ const RestaurantSettings: React.FC = () => {
 
                         <div className="space-y-3 mt-1">
                             <label className="flex items-start gap-3 cursor-pointer">
-                                <input type="checkbox" defaultChecked className="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-600" />
+                                <input type="checkbox" defaultChecked className="mt-1 h-4 w-4 rounded border-slate-300 text-[#6366F1]" />
                                 <div>
                                     <p className="text-sm font-medium text-slate-800">Email per ogni nuova prenotazione</p>
                                     <p className="text-xs text-slate-500">Riceverai una mail di conferma con tutti i dettagli.</p>
                                 </div>
                             </label>
                             <label className="flex items-start gap-3 cursor-pointer">
-                                <input type="checkbox" className="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-600" />
+                                <input type="checkbox" className="mt-1 h-4 w-4 rounded border-slate-300 text-[#6366F1]" />
                                 <div>
                                     <p className="text-sm font-medium text-slate-800">Riepilogo giornaliero</p>
                                     <p className="text-xs text-slate-500">Ogni mattina una panoramica delle prenotazioni del giorno.</p>
@@ -340,7 +338,7 @@ const RestaurantSettings: React.FC = () => {
 
                     <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-4">
                         <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                            <Lock size={16} className="text-emerald-600" />
+                            <Lock size={16} className="text-[#6366F1]" />
                             Sicurezza & accessi
                         </h3>
                         <p className="text-xs text-slate-500">
@@ -360,7 +358,7 @@ const RestaurantSettings: React.FC = () => {
 
                     <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-4">
                         <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                            <FileText size={16} className="text-emerald-600" />
+                            <FileText size={16} className="text-[#6366F1]" />
                             Menu in PDF
                         </h3>
                         <p className="text-xs text-slate-500">
@@ -382,7 +380,7 @@ const RestaurantSettings: React.FC = () => {
                         </div>
 
                         <div className="pt-2">
-                            <label className="inline-flex items-center gap-2 rounded-2xl border border-dashed border-emerald-300 bg-emerald-50/40 px-3 py-2 text-xs font-semibold text-emerald-700 cursor-pointer hover:bg-emerald-50">
+                            <label className="inline-flex items-center gap-2 rounded-2xl border border-dashed border-indigo-300 bg-indigo-50/40 px-3 py-2 text-xs font-semibold text-[#6366F1] cursor-pointer hover:bg-indigo-50">
                                 <Upload size={14} />
                                 <span>Carica nuovo PDF</span>
                                 <input type="file" accept="application/pdf" className="hidden" />
