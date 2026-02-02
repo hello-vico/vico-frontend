@@ -20,8 +20,10 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response?.status === 401) {
+        // Only redirect on actual 401 unauthorized errors from auth endpoints
+        if (error.response?.status === 401 && error.config?.url?.includes('/auth/')) {
             localStorage.removeItem('vico_token');
+            localStorage.removeItem('vico_user_role');
             if (window.location.pathname !== '/login') {
                 window.location.href = '/login';
             }

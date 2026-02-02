@@ -3,6 +3,8 @@
 @theme {
   --color-brand-primary: #ff4d4f;
   --color-brand-secondary: #ff7875;
+
+  --animate-bounce-slow: bounce 3s infinite;
 }
 
 :root {
