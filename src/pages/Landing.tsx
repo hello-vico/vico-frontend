@@ -29,7 +29,7 @@ const Landing = () => {
               <Link to="/login" className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white text-sm font-bold rounded-full border border-slate-700 hover:border-slate-600 transition-all duration-300">
                 Accedi
               </Link>
-              <button className="px-5 py-2.5 bg-brand-gradient hover:opacity-90 text-slate-950 text-sm font-bold rounded-full transition-all duration-300 shadow-lg shadow-indigo-500/20">
+              <button className="px-5 py-2.5 bg-brand-gradient text-white hover:opacity-90 text-slate-950 text-sm font-bold rounded-full transition-all duration-300 shadow-lg shadow-indigo-500/20">
                 Richiedi Demo
               </button>
             </div>
@@ -65,7 +65,7 @@ const Landing = () => {
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                <button className="w-full sm:w-auto px-8 py-4 bg-brand-gradient hover:opacity-90 text-slate-950 font-bold rounded-xl flex items-center justify-center gap-2 transition-all duration-300 shadow-xl shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:-translate-y-1">
+                <button className="w-full sm:w-auto px-8 py-4 bg-brand-gradient text-white hover:opacity-90 text-slate-950 font-bold rounded-xl flex items-center justify-center gap-2 transition-all duration-300 shadow-xl shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:-translate-y-1">
                   RICHIEDI DEMO
                   <ArrowRight className="w-5 h-5" />
                 </button>
@@ -266,7 +266,7 @@ const Landing = () => {
             <span className="px-4 py-2 bg-slate-800 rounded-full text-slate-300 text-sm font-semibold border border-slate-700">MASSIMIZZA I COPERTI</span>
           </div>
 
-          <button className="px-10 py-5 bg-brand-gradient hover:opacity-90 text-slate-950 text-lg font-bold rounded-2xl transition-all duration-300 shadow-xl shadow-indigo-500/20 hover:scale-105">
+          <button className="px-10 py-5 bg-brand-gradient text-white hover:opacity-90 text-slate-950 text-lg font-bold rounded-2xl transition-all duration-300 shadow-xl shadow-indigo-500/20 hover:scale-105">
             RICHIEDI DEMO GRATUITA
           </button>
           <p className="mt-6 text-slate-500 text-sm">*Nessuna carta di credito richiesta per iniziare</p>
