@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import BaseLayout from '../../components/layout/BaseLayout';
 import { restaurantNavItems } from './navItems';
-import { LayoutGrid, Plus, Users, Edit2, Trash2 } from 'lucide-react';
+import { LayoutGrid, Plus, Users, Edit2, Trash2, Power } from 'lucide-react';
 
 type Table = {
     id: number;
@@ -16,13 +16,14 @@ type Room = {
     description: string;
     capacity: number;
     tables: Table[];
+    isActive: boolean;
 };
 
 const mockRooms: Room[] = [
     {
         id: 1,
         name: 'Sala Principale',
-        description: 'Sala luminosa all’ingresso, ideale per il servizio quotidiano.',
+        description: 'Sala luminosa all\'ingresso, ideale per il servizio quotidiano.',
         capacity: 40,
         tables: [
             { id: 1, name: 'T-01', seats: 2, status: 'available' },
@@ -30,6 +31,7 @@ const mockRooms: Room[] = [
             { id: 3, name: 'T-03', seats: 4, status: 'occupied' },
             { id: 4, name: 'T-04', seats: 6, status: 'available' },
         ],
+        isActive: true,
     },
     {
         id: 2,
@@ -41,6 +43,7 @@ const mockRooms: Room[] = [
             { id: 6, name: 'T-11', seats: 2, status: 'available' },
             { id: 7, name: 'T-12', seats: 6, status: 'reserved' },
         ],
+        isActive: true,
     },
     {
         id: 3,
@@ -52,15 +55,23 @@ const mockRooms: Room[] = [
             { id: 9, name: 'D-02', seats: 4, status: 'available' },
             { id: 10, name: 'D-03', seats: 4, status: 'occupied' },
         ],
+        isActive: true,
     },
 ];
 
 type TableFormMode = 'create' | 'edit';
+type RoomFormMode = 'create' | 'edit';
 
 const emptyTableForm: { id?: number; name: string; seats: number; status: Table['status'] } = {
     name: '',
     seats: 2,
     status: 'available',
+};
+
+const emptyRoomForm: { id?: number; name: string; description: string; capacity: number } = {
+    name: '',
+    description: '',
+    capacity: 10,
 };
 
 const RoomsTablesManagement: React.FC = () => {
@@ -71,10 +82,116 @@ const RoomsTablesManagement: React.FC = () => {
     const [tableForm, setTableForm] = useState<typeof emptyTableForm>(emptyTableForm);
     const [showTableDrawer, setShowTableDrawer] = useState(false);
 
+    const [roomFormMode, setRoomFormMode] = useState<RoomFormMode>('create');
+    const [roomForm, setRoomForm] = useState<typeof emptyRoomForm>(emptyRoomForm);
+    const [showRoomDrawer, setShowRoomDrawer] = useState(false);
+
     const selectedRoom = useMemo(
-        () => rooms.find((r) => r.id === selectedRoomId) ?? rooms[0] ?? null,
+        () => (selectedRoomId ? rooms.find((r) => r.id === selectedRoomId) ?? null : null),
         [rooms, selectedRoomId]
     );
+
+    const openCreateRoom = () => {
+        setRoomFormMode('create');
+        setRoomForm({
+            ...emptyRoomForm,
+            name: `Sala ${rooms.length + 1}`,
+        });
+        setShowRoomDrawer(true);
+    };
+
+    const openEditRoom = (room: Room) => {
+        setRoomFormMode('edit');
+        setRoomForm({
+            id: room.id,
+            name: room.name,
+            description: room.description,
+            capacity: room.capacity,
+        });
+        setShowRoomDrawer(true);
+    };
+
+    const handleChangeRoomField = (field: 'name' | 'description' | 'capacity', value: string | number) => {
+        setRoomForm((prev) => ({
+            ...prev,
+            [field]: field === 'capacity' ? Number(value) || 0 : value,
+        }));
+    };
+
+    const handleSaveRoom = () => {
+        if (!roomForm.name.trim() || roomForm.capacity <= 0) {
+            return;
+        }
+
+        setRooms((prevRooms) => {
+            if (roomFormMode === 'create') {
+                const nextId =
+                    prevRooms.reduce((max, r) => (r.id > max ? r.id : max), 0) + 1;
+
+                const newRoom: Room = {
+                    id: nextId,
+                    name: roomForm.name.trim(),
+                    description: roomForm.description.trim(),
+                    capacity: roomForm.capacity,
+                    tables: [],
+                    isActive: true,
+                };
+
+                return [...prevRooms, newRoom];
+            }
+
+            // edit
+            return prevRooms.map((room) =>
+                room.id === roomForm.id
+                    ? {
+                        ...room,
+                        name: roomForm.name.trim(),
+                        description: roomForm.description.trim(),
+                        capacity: roomForm.capacity,
+                    }
+                    : room
+            );
+        });
+
+        setShowRoomDrawer(false);
+        setRoomForm(emptyRoomForm);
+
+        // se è una nuova sala, la selezioniamo
+        if (roomFormMode === 'create') {
+            setSelectedRoomId((prevSelected) => {
+                const existingIds = rooms.map((r) => r.id);
+                const maxId = existingIds.reduce((max, id) => (id > max ? id : max), 0) + 1;
+                return maxId || prevSelected;
+            });
+        }
+    };
+
+    const handleCancelRoomEdit = () => {
+        setShowRoomDrawer(false);
+        setRoomForm(emptyRoomForm);
+    };
+
+    const handleDeleteRoom = (roomId: number) => {
+        if (rooms.length <= 1) {
+            // almeno una sala deve rimanere
+            return;
+        }
+
+        const updated = rooms.filter((r) => r.id !== roomId);
+        setRooms(updated);
+
+        if (selectedRoomId === roomId) {
+            setSelectedRoomId(updated[0]?.id ?? null);
+        }
+    };
+
+    const handleToggleRoomActive = (roomId: number) => {
+        setRooms((prevRooms) =>
+            prevRooms.map((room) =>
+                room.id === roomId ? { ...room, isActive: !room.isActive } : room
+            )
+        );
+    };
 
     const openCreateTable = (roomId: number) => {
         setTableFormMode('create');
@@ -176,11 +293,20 @@ const RoomsTablesManagement: React.FC = () => {
                     </p>
                 </div>
                 <div className="flex items-center gap-3">
-                    <button className="flex items-center gap-2 bg-emerald-600 text-white px-5 py-2.5 rounded-2xl font-bold text-sm hover:bg-emerald-500 transition-all shadow-lg shadow-emerald-200">
+                    <button
+                        type="button"
+                        onClick={openCreateRoom}
+                        className="flex items-center gap-2 bg-emerald-600 text-white px-5 py-2.5 rounded-2xl font-bold text-sm hover:bg-emerald-500 transition-all shadow-lg shadow-emerald-200"
+                    >
                         <Plus size={18} />
                         Nuova sala
                     </button>
-                    <button className="flex items-center gap-2 bg-white border border-slate-200 text-slate-700 px-4 py-2.5 rounded-2xl text-sm font-semibold hover:bg-slate-50 transition-all">
+                    <button
+                        type="button"
+                        onClick={() => selectedRoom && openCreateTable(selectedRoom.id)}
+                        disabled={!selectedRoom}
+                        className="flex items-center gap-2 bg-white border border-slate-200 text-slate-700 px-4 py-2.5 rounded-2xl text-sm font-semibold hover:bg-slate-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
                         <Plus size={16} />
                         Nuovo tavolo veloce
                     </button>
@@ -196,24 +322,44 @@ const RoomsTablesManagement: React.FC = () => {
                                 key={room.id}
                                 type="button"
                                 onClick={() => setSelectedRoomId(room.id)}
-                                className={`px-4 py-2 rounded-2xl text-xs font-semibold border transition-all ${selectedRoom && selectedRoom.id === room.id
+                                className={`relative px-4 py-2 rounded-2xl text-xs font-semibold border transition-all ${selectedRoom && selectedRoom.id === room.id
                                         ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
-                                        : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                                        : room.isActive
+                                            ? 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                                            : 'bg-slate-100 text-slate-400 border-slate-200 opacity-70'
                                     }`}
                             >
-                                {room.name}
+                                <span className="flex items-center gap-2">
+                                    {room.name}
+                                    {!room.isActive && (
+                                        <span className="inline-block w-2 h-2 rounded-full bg-slate-400" />
+                                    )}
+                                </span>
                             </button>
                         ))}
                     </div>
 
-                    {rooms.map((room) => (
-                        <div
-                            key={room.id}
-                            className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 hover:border-emerald-200 hover:shadow-md transition-all"
-                        >
-                            <div className="flex items-start justify-between gap-4 mb-4">
+                    {rooms
+                        .filter((room) =>
+                            selectedRoom ? room.id === selectedRoom.id : true
+                        )
+                        .map((room) => (
+                            <div
+                                key={room.id}
+                                className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 hover:border-emerald-200 hover:shadow-md transition-all"
+                            >
+                                <div className="flex items-start justify-between gap-4 mb-4">
                                 <div>
-                                    <h3 className="text-lg font-bold text-slate-900">{room.name}</h3>
+                                    <div className="flex items-center gap-2">
+                                        <h3 className="text-lg font-bold text-slate-900">{room.name}</h3>
+                                        <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide border ${
+                                            room.isActive
+                                                ? 'bg-emerald-50 text-emerald-700 border-emerald-100'
+                                                : 'bg-slate-100 text-slate-500 border-slate-200'
+                                        }`}>
+                                            {room.isActive ? 'Attiva' : 'Disattiva'}
+                                        </span>
+                                    </div>
                                     <p className="text-xs text-slate-500 mt-1 max-w-md">{room.description}</p>
                                     <p className="text-xs font-semibold text-slate-500 mt-2">
                                         Capacità stimata:{' '}
@@ -226,62 +372,157 @@ const RoomsTablesManagement: React.FC = () => {
                                         </span>
                                     </p>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <button className="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50">
-                                        <Edit2 size={14} />
-                                        Modifica sala
-                                    </button>
-                                    <button className="inline-flex items-center gap-1 rounded-xl border border-red-100 bg-red-50/60 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50">
-                                        <Trash2 size={14} />
-                                        Rimuovi
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => handleToggleRoomActive(room.id)}
+                                            className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-semibold transition-all ${
+                                                room.isActive
+                                                    ? 'border-emerald-200 bg-emerald-50/60 text-emerald-700 hover:bg-emerald-50'
+                                                    : 'border-slate-200 bg-white text-slate-500 hover:bg-slate-50'
+                                            }`}
+                                            title={room.isActive ? 'Disattiva sala' : 'Attiva sala'}
+                                        >
+                                            <Power size={14} />
+                                            {room.isActive ? 'Attiva' : 'Disattiva'}
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => openEditRoom(room)}
+                                            className="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                                        >
+                                            <Edit2 size={14} />
+                                            Modifica sala
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleDeleteRoom(room.id)}
+                                            className="inline-flex items-center gap-1 rounded-xl border border-red-100 bg-red-50/60 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50"
+                                        >
+                                            <Trash2 size={14} />
+                                            Rimuovi
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className={`grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 ${!room.isActive ? 'opacity-50 pointer-events-none' : ''}`}>
+                                    {room.tables.map((table) => (
+                                        <button
+                                            key={table.id}
+                                            type="button"
+                                            onClick={() => openEditTable(room.id, table)}
+                                            className="group bg-slate-50 rounded-2xl border border-slate-100 px-4 py-3 flex flex-col items-start gap-1 text-left hover:bg-emerald-50/60 hover:border-emerald-200 transition-all"
+                                        >
+                                            <div className="flex items-center justify-between w-full gap-2">
+                                                <span className="text-sm font-bold text-slate-900">{table.name}</span>
+                                                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-500">
+                                                    <Users size={12} className="text-slate-400 group-hover:text-emerald-600" />
+                                                    {table.seats}
+                                                </span>
+                                            </div>
+                                            <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide
+                                            ${table.status === 'available'
+                                                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-100'
+                                                    : table.status === 'reserved'
+                                                        ? 'bg-amber-50 text-amber-700 border border-amber-100'
+                                                        : 'bg-red-50 text-red-700 border border-red-100'
+                                                }
+                                        `}>
+                                                {table.status === 'available' && 'Libero'}
+                                                {table.status === 'reserved' && 'Riservato'}
+                                                {table.status === 'occupied' && 'Occupato'}
+                                            </span>
+                                        </button>
+                                    ))}
+
+                                    <button
+                                        type="button"
+                                        onClick={() => openCreateTable(room.id)}
+                                        className="border border-dashed border-slate-200 rounded-2xl px-4 py-3 text-xs font-semibold text-slate-500 hover:border-emerald-300 hover:bg-emerald-50/40 hover:text-emerald-700 flex items-center justify-center gap-2 transition-all"
+                                    >
+                                        <Plus size={14} />
+                                        Aggiungi tavolo
                                     </button>
                                 </div>
                             </div>
-
-                            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
-                                {room.tables.map((table) => (
-                                    <button
-                                        key={table.id}
-                                        type="button"
-                                        onClick={() => openEditTable(room.id, table)}
-                                        className="group bg-slate-50 rounded-2xl border border-slate-100 px-4 py-3 flex flex-col items-start gap-1 text-left hover:bg-emerald-50/60 hover:border-emerald-200 transition-all"
-                                    >
-                                        <div className="flex items-center justify-between w-full gap-2">
-                                            <span className="text-sm font-bold text-slate-900">{table.name}</span>
-                                            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-500">
-                                                <Users size={12} className="text-slate-400 group-hover:text-emerald-600" />
-                                                {table.seats}
-                                            </span>
-                                        </div>
-                                        <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide
-                                            ${table.status === 'available'
-                                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-100'
-                                                : table.status === 'reserved'
-                                                    ? 'bg-amber-50 text-amber-700 border border-amber-100'
-                                                    : 'bg-red-50 text-red-700 border border-red-100'
-                                            }
-                                        `}>
-                                            {table.status === 'available' && 'Libero'}
-                                            {table.status === 'reserved' && 'Riservato'}
-                                            {table.status === 'occupied' && 'Occupato'}
-                                        </span>
-                                    </button>
-                                ))}
-
-                                <button
-                                    type="button"
-                                    onClick={() => openCreateTable(room.id)}
-                                    className="border border-dashed border-slate-200 rounded-2xl px-4 py-3 text-xs font-semibold text-slate-500 hover:border-emerald-300 hover:bg-emerald-50/40 hover:text-emerald-700 flex items-center justify-center gap-2 transition-all"
-                                >
-                                    <Plus size={14} />
-                                    Aggiungi tavolo
-                                </button>
-                            </div>
-                        </div>
-                    ))}
+                        ))}
                 </div>
 
                 <div className="space-y-6">
+                    {/* Pannello laterale: form sala */}
+                    {showRoomDrawer && (
+                        <div className="bg-white rounded-3xl border border-slate-100 shadow-lg p-6 space-y-4">
+                            <div className="flex items-start justify-between gap-3">
+                                <div>
+                                    <h3 className="text-sm font-bold text-slate-900">
+                                        {roomFormMode === 'create' ? 'Nuova sala' : 'Modifica sala'}
+                                    </h3>
+                                    <p className="text-xs text-slate-500 mt-0.5">
+                                        Definisci gli spazi del ristorante (interno, dehors, sala privata, ecc.).
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                                        Nome sala
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={roomForm.name}
+                                        onChange={(e) => handleChangeRoomField('name', e.target.value)}
+                                        className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500"
+                                        placeholder="Es. Sala Principale"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                                        Descrizione
+                                    </label>
+                                    <textarea
+                                        rows={3}
+                                        value={roomForm.description}
+                                        onChange={(e) => handleChangeRoomField('description', e.target.value)}
+                                        className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 resize-none"
+                                        placeholder="Es. Sala luminosa all'ingresso, ideale per il servizio quotidiano."
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                                        Capacità stimata (coperti)
+                                    </label>
+                                    <input
+                                        type="number"
+                                        min={1}
+                                        value={roomForm.capacity}
+                                        onChange={(e) => handleChangeRoomField('capacity', e.target.value)}
+                                        className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="flex items-center justify-between pt-2">
+                                <button
+                                    type="button"
+                                    onClick={handleCancelRoomEdit}
+                                    className="text-xs font-semibold text-slate-500 hover:text-slate-700"
+                                >
+                                    Annulla
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={handleSaveRoom}
+                                    className="inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-500 shadow-sm"
+                                >
+                                    Salva sala
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
                     {/* Pannello laterale: form tavolo */}
                     {showTableDrawer && (
                         <div className="bg-white rounded-3xl border border-emerald-200 shadow-lg p-6 space-y-4">
@@ -334,8 +575,8 @@ const RoomsTablesManagement: React.FC = () => {
                                             type="button"
                                             onClick={() => handleChangeTableField('status', 'available')}
                                             className={`flex-1 px-3 py-2 rounded-xl text-xs font-semibold border ${tableForm.status === 'available'
-                                                    ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
-                                                    : 'bg-white text-slate-600 border-slate-200'
+                                                ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                                                : 'bg-white text-slate-600 border-slate-200'
                                                 }`}
                                         >
                                             Libero
@@ -344,8 +585,8 @@ const RoomsTablesManagement: React.FC = () => {
                                             type="button"
                                             onClick={() => handleChangeTableField('status', 'reserved')}
                                             className={`flex-1 px-3 py-2 rounded-xl text-xs font-semibold border ${tableForm.status === 'reserved'
-                                                    ? 'bg-amber-50 text-amber-700 border-amber-300'
-                                                    : 'bg-white text-slate-600 border-slate-200'
+                                                ? 'bg-amber-50 text-amber-700 border-amber-300'
+                                                : 'bg-white text-slate-600 border-slate-200'
                                                 }`}
                                         >
                                             Riservato
@@ -354,8 +595,8 @@ const RoomsTablesManagement: React.FC = () => {
                                             type="button"
                                             onClick={() => handleChangeTableField('status', 'occupied')}
                                             className={`flex-1 px-3 py-2 rounded-xl text-xs font-semibold border ${tableForm.status === 'occupied'
-                                                    ? 'bg-red-50 text-red-700 border-red-300'
-                                                    : 'bg-white text-slate-600 border-slate-200'
+                                                ? 'bg-red-50 text-red-700 border-red-300'
+                                                : 'bg-white text-slate-600 border-slate-200'
                                                 }`}
                                         >
                                             Occupato

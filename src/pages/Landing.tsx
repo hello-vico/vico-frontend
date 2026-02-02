@@ -224,7 +224,7 @@ const Landing = () => {
       {/* Setup Section */}
       <section className="py-24 bg-slate-950 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">Start in 5 minuti</h2>
+          <h2 className="text-3xl md:text-5xl font-bold mb-6">Inizia in 5 minuti</h2>
           <p className="text-xl text-slate-400 mb-16 max-w-3xl mx-auto">
             Sia che tu abbia un telefono fisso o un numero di cellulare, con la prova gratuita è inclusa l’installazione e la configurazione per la tua attività.*
           </p>
