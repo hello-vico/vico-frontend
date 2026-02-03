@@ -1,4 +1,5 @@
-import { LayoutDashboard, Calendar, Utensils, LayoutGrid } from 'lucide-react';
+import { Calendar, LayoutGrid } from 'lucide-react';
+//import { LayoutDashboard, Calendar, Utensils, LayoutGrid } from 'lucide-react';
 
 export const restaurantNavItems = [
     //{ label: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/restaurant/dashboard' },
