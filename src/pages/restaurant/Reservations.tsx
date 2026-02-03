@@ -31,16 +31,49 @@ type ReservationForm = {
     name: string;
     guests: number;
     time: string;
+    date: string; // added date field
     status: 'pending' | 'confirmed' | 'cancelled';
     table: string;
     phone: string;
     notes: string;
 };
 
+const mockRooms = [
+    {
+        id: 1,
+        name: 'Sala Principale',
+        tables: [
+            { id: 1, name: 'T-01', seats: 2 },
+            { id: 2, name: 'T-02', seats: 4 },
+            { id: 3, name: 'T-03', seats: 4 },
+            { id: 4, name: 'T-04', seats: 6 },
+        ],
+    },
+    {
+        id: 2,
+        name: 'Sala Interna',
+        tables: [
+            { id: 5, name: 'T-10', seats: 4 },
+            { id: 6, name: 'T-11', seats: 2 },
+            { id: 7, name: 'T-12', seats: 6 },
+        ],
+    },
+    {
+        id: 3,
+        name: 'Dehors',
+        tables: [
+            { id: 8, name: 'D-01', seats: 2 },
+            { id: 9, name: 'D-02', seats: 4 },
+            { id: 10, name: 'D-03', seats: 4 },
+        ],
+    },
+];
+
 const emptyReservationForm: ReservationForm = {
     name: '',
     guests: 2,
     time: '19:00',
+    date: new Date().toISOString().split('T')[0],
     status: 'pending',
     table: '',
     phone: '',
@@ -53,6 +86,14 @@ const Reservations: React.FC = () => {
     const [calendarMonth, setCalendarMonth] = useState<Date>(new Date());
     const [showNewReservationModal, setShowNewReservationModal] = useState(false);
     const [reservationForm, setReservationForm] = useState(emptyReservationForm);
+
+    const openNewReservationModal = () => {
+        setReservationForm({
+            ...emptyReservationForm,
+            date: selectedDate.toISOString().split('T')[0],
+        });
+        setShowNewReservationModal(true);
+    };
 
     const [reservations, setReservations] = useState<Reservation[]>([
         { id: 1, name: 'Mario Rossi', guests: 4, time: '13:00', status: 'confirmed', table: 'T-04', phone: '+39 333 123 4567', date: new Date() },
@@ -119,7 +160,7 @@ const Reservations: React.FC = () => {
             status: reservationForm.status,
             table: reservationForm.table.trim() || 'Unassigned',
             phone: reservationForm.phone.trim(),
-            date: selectedDate,
+            date: new Date(reservationForm.date),
             notes: reservationForm.notes.trim(),
         };
 
@@ -326,7 +367,7 @@ const Reservations: React.FC = () => {
                                     Data: {selectedDate.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' })}
                                 </p>
                             </div>
-                            
+
                             <div className="p-6 md:p-8">
                                 <div className="grid md:grid-cols-2 gap-6">
                                     {/* Colonna sinistra */}
@@ -344,7 +385,7 @@ const Reservations: React.FC = () => {
                                                 placeholder="Es. Mario Rossi"
                                             />
                                         </div>
-                                        
+
                                         {/* Telefono */}
                                         <div>
                                             <label className="block text-sm font-semibold text-slate-700 mb-1.5">
@@ -358,9 +399,20 @@ const Reservations: React.FC = () => {
                                                 placeholder="Es. +39 333 123 4567"
                                             />
                                         </div>
-                                        
-                                        {/* Orario e Coperti */}
+
+                                        {/* Orario, Coperti e Data */}
                                         <div className="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+                                                    Data
+                                                </label>
+                                                <input
+                                                    type="date"
+                                                    value={reservationForm.date}
+                                                    onChange={(e) => handleReservationFieldChange('date', e.target.value)}
+                                                    className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-[#6366F1]"
+                                                />
+                                            </div>
                                             <div>
                                                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">
                                                     Orario
@@ -372,6 +424,9 @@ const Reservations: React.FC = () => {
                                                     className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-[#6366F1]"
                                                 />
                                             </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-4">
                                             <div>
                                                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">
                                                     Coperti
@@ -385,23 +440,30 @@ const Reservations: React.FC = () => {
                                                     className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-[#6366F1]"
                                                 />
                                             </div>
-                                        </div>
-                                        
-                                        {/* Tavolo */}
-                                        <div>
-                                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                                                Tavolo
-                                            </label>
-                                            <input
-                                                type="text"
-                                                value={reservationForm.table}
-                                                onChange={(e) => handleReservationFieldChange('table', e.target.value)}
-                                                className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-[#6366F1]"
-                                                placeholder="Es. T-05 (opzionale)"
-                                            />
+                                            <div>
+                                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+                                                    Tavolo
+                                                </label>
+                                                <select
+                                                    value={reservationForm.table}
+                                                    onChange={(e) => handleReservationFieldChange('table', e.target.value)}
+                                                    className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-[#6366F1] bg-white"
+                                                >
+                                                    <option value="">Seleziona tavolo</option>
+                                                    {mockRooms.map(sala => (
+                                                        <optgroup key={sala.id} label={sala.name}>
+                                                            {sala.tables.map(t => (
+                                                                <option key={t.id} value={t.name}>
+                                                                    {t.name} ({t.seats} posti)
+                                                                </option>
+                                                            ))}
+                                                        </optgroup>
+                                                    ))}
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-                                    
+
                                     {/* Colonna destra */}
                                     <div className="space-y-6">
                                         {/* Stato */}
@@ -413,39 +475,36 @@ const Reservations: React.FC = () => {
                                                 <button
                                                     type="button"
                                                     onClick={() => handleReservationFieldChange('status', 'pending')}
-                                                    className={`flex-1 px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all ${
-                                                        reservationForm.status === 'pending'
+                                                    className={`flex-1 px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all ${reservationForm.status === 'pending'
                                                             ? 'bg-amber-50 text-amber-700 border-amber-300'
                                                             : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-                                                    }`}
+                                                        }`}
                                                 >
                                                     In attesa
                                                 </button>
                                                 <button
                                                     type="button"
                                                     onClick={() => handleReservationFieldChange('status', 'confirmed')}
-                                                    className={`flex-1 px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all ${
-                                                        reservationForm.status === 'confirmed'
+                                                    className={`flex-1 px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all ${reservationForm.status === 'confirmed'
                                                             ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
                                                             : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-                                                    }`}
+                                                        }`}
                                                 >
                                                     Confermato
                                                 </button>
                                                 <button
                                                     type="button"
                                                     onClick={() => handleReservationFieldChange('status', 'cancelled')}
-                                                    className={`flex-1 px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all ${
-                                                        reservationForm.status === 'cancelled'
+                                                    className={`flex-1 px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all ${reservationForm.status === 'cancelled'
                                                             ? 'bg-red-50 text-red-700 border-red-300'
                                                             : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-                                                    }`}
+                                                        }`}
                                                 >
                                                     Annullato
                                                 </button>
                                             </div>
                                         </div>
-                                        
+
                                         {/* Note */}
                                         <div>
                                             <label className="block text-sm font-semibold text-slate-700 mb-1.5">
@@ -462,7 +521,7 @@ const Reservations: React.FC = () => {
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div className="p-6 border-t border-slate-100 flex items-center justify-between">
                                 <button
                                     onClick={handleCancelReservation}
@@ -502,7 +561,7 @@ const Reservations: React.FC = () => {
                         </button>
                         <div className="hidden md:flex items-center gap-3" >
                             <button title="Aggiungi prenotazione"
-                                onClick={() => setShowNewReservationModal(true)}
+                                onClick={openNewReservationModal}
                                 className="flex items-center gap-2 bg-brand-primary text-white border border-slate-200 px-4 py-3 rounded-2xl font-bold text-slate-600 hover:opacity-80 transition-all">
                                 <Plus size={18} />
                             </button>
