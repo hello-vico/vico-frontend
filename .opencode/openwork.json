@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "workspace": {
+    "name": "vico-frontend",
+    "createdAt": 1770040254143,
+    "preset": "starter"
+  },
+  "authorizedRoots": [
+    "C:\\Users\\alber\\Desktop\\SVILUPPO\\VICO\\vico-frontend"
+  ]
+}
