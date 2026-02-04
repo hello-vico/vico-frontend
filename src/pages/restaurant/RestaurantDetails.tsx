@@ -14,13 +14,15 @@ import {
     Users,
     Clock,
     Baby,
-    Cake
+    Cake,
+    Tv
 } from 'lucide-react';
 
 interface VenueDetails {
     description: string;
     hospitality: {
         languages: string[];
+        customLanguages: string;
         groupsAllowed: boolean;
         maxGroupSize: number;
     };
@@ -42,16 +44,25 @@ interface VenueDetails {
         lactoseFree: boolean;
         organic: boolean;
         kidsMenu: boolean;
+        halal: boolean;
+        kosher: boolean;
     };
     amenities: {
         wifi: boolean;
         airConditioning: boolean;
         outdoorSeating: boolean;
         privateRoom: boolean;
+        privateRoomCapacity: { min: number; max: number };
         kidsArea: boolean;
         petsAllowed: boolean;
         changingTable: boolean;
         highChairs: 'none' | 'limited' | 'available';
+        sports: {
+            available: boolean;
+            hasTv: boolean;
+            hasSky: boolean;
+            hasDazn: boolean;
+        };
     };
     atmosphere: string[];
     paymentMethods: {
@@ -69,6 +80,7 @@ const initialDetails: VenueDetails = {
     description: '',
     hospitality: {
         languages: ['Italiano'],
+        customLanguages: '',
         groupsAllowed: true,
         maxGroupSize: 20,
     },
@@ -90,16 +102,25 @@ const initialDetails: VenueDetails = {
         lactoseFree: false,
         organic: false,
         kidsMenu: false,
+        halal: false,
+        kosher: false,
     },
     amenities: {
         wifi: true,
         airConditioning: true,
         outdoorSeating: false,
         privateRoom: false,
+        privateRoomCapacity: { min: 0, max: 0 },
         kidsArea: false,
         petsAllowed: true,
         changingTable: false,
         highChairs: 'available',
+        sports: {
+            available: false,
+            hasTv: false,
+            hasSky: false,
+            hasDazn: false,
+        },
     },
     atmosphere: [],
     paymentMethods: {
@@ -190,6 +211,22 @@ const RestaurantDetails: React.FC = () => {
         }));
     };
 
+    const handleSportsChange = (field: string) => {
+        // @ts-ignore
+        setDetails(prev => ({
+            ...prev,
+            amenities: {
+                ...prev.amenities,
+                sports: {
+                    // @ts-ignore
+                    ...prev.amenities.sports,
+                    // @ts-ignore
+                    [field]: !prev.amenities.sports[field]
+                }
+            }
+        }));
+    };
+
     const handleSave = () => {
         setIsSaving(true);
         // Mock save
@@ -248,49 +285,47 @@ const RestaurantDetails: React.FC = () => {
                     </div>
 
                     {/* Orari Cucina */}
-                    <div className="col-span-1 md:col-span-2 lg:col-span-3 bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+                    <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
                         <div className="flex items-center gap-2 mb-4">
                             <Clock size={20} className="text-[#6366F1]" />
                             <h3 className="font-bold text-slate-800">Orari Cucina</h3>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="flex items-center gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
-                                <span className="font-semibold text-slate-700 w-20">Pranzo</span>
-                                <div className="flex items-center gap-2 text-sm text-slate-600">
-                                    <span>dalle</span>
-                                    <input
-                                        type="time"
-                                        value={details.kitchenHours.lunch.from}
-                                        onChange={(e) => handleKitchenTimeChange('lunch', 'from', e.target.value)}
-                                        className="bg-white border border-slate-200 rounded-lg px-2 py-1"
-                                    />
-                                    <span>alle</span>
-                                    <input
-                                        type="time"
-                                        value={details.kitchenHours.lunch.to}
-                                        onChange={(e) => handleKitchenTimeChange('lunch', 'to', e.target.value)}
-                                        className="bg-white border border-slate-200 rounded-lg px-2 py-1"
-                                    />
-                                </div>
+                        <div className="flex items-center gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                            <span className="font-semibold text-slate-700 w-20">Pranzo</span>
+                            <div className="flex items-center gap-2 text-sm text-slate-600">
+                                {/* <span>dalle</span> */}
+                                <input
+                                    type="time"
+                                    value={details.kitchenHours.lunch.from}
+                                    onChange={(e) => handleKitchenTimeChange('lunch', 'from', e.target.value)}
+                                    className="bg-white border border-slate-200 rounded-lg px-2 py-1"
+                                />
+                                {/*<span>alle</span>*/}
+                                <input
+                                    type="time"
+                                    value={details.kitchenHours.lunch.to}
+                                    onChange={(e) => handleKitchenTimeChange('lunch', 'to', e.target.value)}
+                                    className="bg-white border border-slate-200 rounded-lg px-2 py-1"
+                                />
                             </div>
-                            <div className="flex items-center gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
-                                <span className="font-semibold text-slate-700 w-20">Cena</span>
-                                <div className="flex items-center gap-2 text-sm text-slate-600">
-                                    <span>dalle</span>
-                                    <input
-                                        type="time"
-                                        value={details.kitchenHours.dinner.from}
-                                        onChange={(e) => handleKitchenTimeChange('dinner', 'from', e.target.value)}
-                                        className="bg-white border border-slate-200 rounded-lg px-2 py-1"
-                                    />
-                                    <span>alle</span>
-                                    <input
-                                        type="time"
-                                        value={details.kitchenHours.dinner.to}
-                                        onChange={(e) => handleKitchenTimeChange('dinner', 'to', e.target.value)}
-                                        className="bg-white border border-slate-200 rounded-lg px-2 py-1"
-                                    />
-                                </div>
+                        </div>
+                        <div className="flex items-center gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                            <span className="font-semibold text-slate-700 w-20">Cena</span>
+                            <div className="flex items-center gap-2 text-sm text-slate-600">
+                                {/* <span>dalle</span> */}
+                                <input
+                                    type="time"
+                                    value={details.kitchenHours.dinner.from}
+                                    onChange={(e) => handleKitchenTimeChange('dinner', 'from', e.target.value)}
+                                    className="bg-white border border-slate-200 rounded-lg px-2 py-1"
+                                />
+                                {/*<span>alle</span>*/}
+                                <input
+                                    type="time"
+                                    value={details.kitchenHours.dinner.to}
+                                    onChange={(e) => handleKitchenTimeChange('dinner', 'to', e.target.value)}
+                                    className="bg-white border border-slate-200 rounded-lg px-2 py-1"
+                                />
                             </div>
                         </div>
                     </div>
@@ -312,13 +347,23 @@ const RestaurantDetails: React.FC = () => {
                                         key={lang}
                                         onClick={() => handleLanguageToggle(lang)}
                                         className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${details.hospitality.languages.includes(lang)
-                                                ? 'bg-indigo-50 text-[#6366F1] border border-[#6366F1]'
-                                                : 'bg-white text-slate-500 border border-slate-200'
+                                            ? 'bg-indigo-50 text-[#6366F1] border border-[#6366F1]'
+                                            : 'bg-white text-slate-500 border border-slate-200'
                                             }`}
                                     >
                                         {lang}
                                     </button>
                                 ))}
+                            </div>
+                            <div className="mt-3">
+                                <label className="text-xs text-slate-500 block mb-1">Altre lingue (separate da virgola)</label>
+                                <input
+                                    type="text"
+                                    value={details.hospitality.customLanguages}
+                                    onChange={(e) => handleNestedChange('hospitality', 'customLanguages', e.target.value)}
+                                    className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm"
+                                    placeholder="Es. Portoghese, Arabo..."
+                                />
                             </div>
                         </div>
 
@@ -342,40 +387,6 @@ const RestaurantDetails: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Accessibilità */}
-                    <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
-                        <div className="flex items-center gap-2 mb-4">
-                            <Accessibility size={20} className="text-[#6366F1]" />
-                            <h3 className="font-bold text-slate-800">Accessibilità</h3>
-                        </div>
-                        <div className="space-y-3">
-                            <ToggleItem
-                                label="Locale in ZTL"
-                                checked={details.accessibility.ztl}
-                                onChange={() => handleToggle('accessibility', 'ztl')}
-                            />
-                            <ToggleItem
-                                label="Accesso disabili"
-                                checked={details.accessibility.wheelchairAccess}
-                                onChange={() => handleToggle('accessibility', 'wheelchairAccess')}
-                            />
-                            <ToggleItem
-                                label="Bagno disabili"
-                                checked={details.accessibility.accessibleRestroom}
-                                onChange={() => handleToggle('accessibility', 'accessibleRestroom')}
-                            />
-                            <ToggleItem
-                                label="Ascensore"
-                                checked={details.accessibility.elevator}
-                                onChange={() => handleToggle('accessibility', 'elevator')}
-                            />
-                            <ToggleItem
-                                label="Parcheggio dedicato"
-                                checked={details.accessibility.parking}
-                                onChange={() => handleToggle('accessibility', 'parking')}
-                            />
-                        </div>
-                    </div>
 
                     {/* Diete e Intolleranze */}
                     <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
@@ -409,6 +420,18 @@ const RestaurantDetails: React.FC = () => {
                                 checked={details.dietary.lactoseFree}
                                 onChange={() => handleToggle('dietary', 'lactoseFree')}
                             />
+                            <ToggleItem
+                                label="Halal"
+                                checked={details.dietary.halal}
+                                onChange={() => handleToggle('dietary', 'halal')}
+                            />
+                            <ToggleItem
+                                label="Kosher"
+                                checked={details.dietary.kosher}
+                                onChange={() => handleToggle('dietary', 'kosher')}
+                            />
+
+
                         </div>
                     </div>
 
@@ -434,6 +457,45 @@ const RestaurantDetails: React.FC = () => {
                                 checked={details.amenities.outdoorSeating}
                                 onChange={() => handleToggle('amenities', 'outdoorSeating')}
                             />
+                            <ToggleItem
+                                label="Saletta Privata"
+                                checked={details.amenities.privateRoom}
+                                onChange={() => handleToggle('amenities', 'privateRoom')}
+                            />
+                            {details.amenities.privateRoom && (
+                                <div className="flex items-center gap-4 bg-slate-50 p-3 rounded-xl border border-slate-100 ml-4">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-xs text-slate-500">Min persone</span>
+                                        <input
+                                            type="number"
+                                            value={details.amenities.privateRoomCapacity.min}
+                                            onChange={(e) => setDetails(prev => ({
+                                                ...prev,
+                                                amenities: {
+                                                    ...prev.amenities,
+                                                    privateRoomCapacity: { ...prev.amenities.privateRoomCapacity, min: parseInt(e.target.value) }
+                                                }
+                                            }))}
+                                            className="w-16 text-center px-2 py-1 rounded-lg border border-slate-200 text-sm"
+                                        />
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-xs text-slate-500">Max persone</span>
+                                        <input
+                                            type="number"
+                                            value={details.amenities.privateRoomCapacity.max}
+                                            onChange={(e) => setDetails(prev => ({
+                                                ...prev,
+                                                amenities: {
+                                                    ...prev.amenities,
+                                                    privateRoomCapacity: { ...prev.amenities.privateRoomCapacity, max: parseInt(e.target.value) }
+                                                }
+                                            }))}
+                                            className="w-16 text-center px-2 py-1 rounded-lg border border-slate-200 text-sm"
+                                        />
+                                    </div>
+                                </div>
+                            )}
                             {/* Family Services Subs */}
                             <div className="pt-2 mt-2 border-t border-slate-100">
                                 <div className="flex items-center gap-2 mb-2 text-xs font-semibold text-slate-500 uppercase">
@@ -457,28 +519,85 @@ const RestaurantDetails: React.FC = () => {
                                     </select>
                                 </div>
                             </div>
+
+                            {/* Sports Section */}
+                            <div className="pt-2 mt-2 border-t border-slate-100">
+                                <div className="flex items-center gap-2 mb-2 text-xs font-semibold text-slate-500 uppercase">
+                                    <Tv size={12} /> Sport & TV
+                                </div>
+                                <ToggleItem
+                                    label="Eventi Sportivi"
+                                    checked={details.amenities.sports.available}
+                                    onChange={() => handleSportsChange('available')}
+                                />
+                                {details.amenities.sports.available && (
+                                    <div className="grid grid-cols-2 gap-2 pl-4 mt-1">
+                                        <label className="flex items-center gap-2 text-sm text-slate-600 bg-slate-50 px-2 py-1.5 rounded-lg border border-slate-100">
+                                            <input
+                                                type="checkbox"
+                                                checked={details.amenities.sports.hasTv}
+                                                onChange={() => handleSportsChange('hasTv')}
+                                                className="rounded border-slate-300 text-[#6366F1]"
+                                            />
+                                            TV Disponibili
+                                        </label>
+                                        <label className="flex items-center gap-2 text-sm text-slate-600 bg-slate-50 px-2 py-1.5 rounded-lg border border-slate-100">
+                                            <input
+                                                type="checkbox"
+                                                checked={details.amenities.sports.hasSky}
+                                                onChange={() => handleSportsChange('hasSky')}
+                                                className="rounded border-slate-300 text-[#6366F1]"
+                                            />
+                                            Sky
+                                        </label>
+                                        <label className="flex items-center gap-2 text-sm text-slate-600 bg-slate-50 px-2 py-1.5 rounded-lg border border-slate-100">
+                                            <input
+                                                type="checkbox"
+                                                checked={details.amenities.sports.hasDazn}
+                                                onChange={() => handleSportsChange('hasDazn')}
+                                                className="rounded border-slate-300 text-[#6366F1]"
+                                            />
+                                            DAZN
+                                        </label>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
 
-                    {/* Atmosfera */}
-                    <div className="col-span-1 md:col-span-2 lg:col-span-3 bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+
+                    {/* Accessibilità */}
+                    <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
                         <div className="flex items-center gap-2 mb-4">
-                            <Armchair size={20} className="text-[#6366F1]" />
-                            <h3 className="font-bold text-slate-800">Atmosfera</h3>
+                            <Accessibility size={20} className="text-[#6366F1]" />
+                            <h3 className="font-bold text-slate-800">Accessibilità</h3>
                         </div>
-                        <div className="flex flex-wrap gap-2">
-                            {atmosphereOptions.map(option => (
-                                <button
-                                    key={option}
-                                    onClick={() => handleAtmosphereToggle(option)}
-                                    className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${details.atmosphere.includes(option)
-                                            ? 'bg-[#6366F1] text-white shadow-md'
-                                            : 'bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100'
-                                        }`}
-                                >
-                                    {option}
-                                </button>
-                            ))}
+                        <div className="space-y-3">
+                            <ToggleItem
+                                label="Locale in ZTL"
+                                checked={details.accessibility.ztl}
+                                onChange={() => handleToggle('accessibility', 'ztl')}
+                            />
+                            <ToggleItem
+                                label="Accesso disabili"
+                                checked={details.accessibility.wheelchairAccess}
+                                onChange={() => handleToggle('accessibility', 'wheelchairAccess')}
+                            />
+                            <ToggleItem
+                                label="Bagno disabili"
+                                checked={details.accessibility.accessibleRestroom}
+                                onChange={() => handleToggle('accessibility', 'accessibleRestroom')}
+                            />
+                            <ToggleItem
+                                label="Ascensore"
+                                checked={details.accessibility.elevator}
+                                onChange={() => handleToggle('accessibility', 'elevator')}
+                            />
+                            <ToggleItem
+                                label="Parcheggio dedicato"
+                                checked={details.accessibility.parking}
+                                onChange={() => handleToggle('accessibility', 'parking')}
+                            />
                         </div>
                     </div>
 
@@ -541,6 +660,27 @@ const RestaurantDetails: React.FC = () => {
                         </div>
                     </div>
 
+                    {/* Atmosfera */}
+                    <div className="col-span-1 md:col-span-2 lg:col-span-3 bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+                        <div className="flex items-center gap-2 mb-4">
+                            <Armchair size={20} className="text-[#6366F1]" />
+                            <h3 className="font-bold text-slate-800">Atmosfera</h3>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                            {atmosphereOptions.map(option => (
+                                <button
+                                    key={option}
+                                    onClick={() => handleAtmosphereToggle(option)}
+                                    className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${details.atmosphere.includes(option)
+                                        ? 'bg-[#6366F1] text-white shadow-md'
+                                        : 'bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100'
+                                        }`}
+                                >
+                                    {option}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
         </BaseLayout>
