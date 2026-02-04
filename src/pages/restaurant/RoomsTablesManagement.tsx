@@ -8,6 +8,8 @@ type Table = {
     name: string;
     seats: number;
     status: 'available' | 'occupied' | 'reserved';
+    isVirtual?: boolean;
+    originalTableIds?: number[];
 };
 
 type Room = {
@@ -85,6 +87,12 @@ const RoomsTablesManagement: React.FC = () => {
     const [roomFormMode, setRoomFormMode] = useState<RoomFormMode>('create');
     const [roomForm, setRoomForm] = useState<typeof emptyRoomForm>(emptyRoomForm);
     const [showRoomDrawer, setShowRoomDrawer] = useState(false);
+
+    // Virtual Tables State
+    const [isSelectionMode, setIsSelectionMode] = useState(false);
+    const [selectedTableIds, setSelectedTableIds] = useState<number[]>([]);
+    const [showVirtualTableModal, setShowVirtualTableModal] = useState(false);
+    const [virtualTableForm, setVirtualTableForm] = useState({ name: '', capacity: 0 });
 
     const selectedRoom = useMemo(
         () => (selectedRoomId ? rooms.find((r) => r.id === selectedRoomId) ?? null : null),
@@ -275,6 +283,53 @@ const RoomsTablesManagement: React.FC = () => {
         setTableFormRoomId(null);
     };
 
+    const handleCreateVirtualTable = () => {
+        if (!virtualTableForm.name.trim() || virtualTableForm.capacity <= 0 || !selectedRoomId) return;
+
+        setRooms(prevRooms => prevRooms.map(room => {
+            if (room.id !== selectedRoomId) return room;
+
+            const nextId = room.tables.reduce((max, t) => (t.id > max ? t.id : max), 0) + 1;
+
+            const newTable: Table = {
+                id: nextId,
+                name: virtualTableForm.name.trim(),
+                seats: virtualTableForm.capacity,
+                status: 'available',
+                isVirtual: true,
+                originalTableIds: selectedTableIds
+            };
+
+            return {
+                ...room,
+                tables: [...room.tables, newTable]
+            };
+        }));
+
+        setShowVirtualTableModal(false);
+        setIsSelectionMode(false);
+        setSelectedTableIds([]);
+        setVirtualTableForm({ name: '', capacity: 0 });
+    };
+
+    const handleDeleteVirtualTable = (roomId: number, tableId: number) => {
+        setRooms(prevRooms => prevRooms.map(room => {
+            if (room.id !== roomId) return room;
+            return {
+                ...room,
+                tables: room.tables.filter(t => t.id !== tableId)
+            };
+        }));
+    };
+
+    const toggleTableSelection = (tableId: number) => {
+        setSelectedTableIds(prev =>
+            prev.includes(tableId)
+                ? prev.filter(id => id !== tableId)
+                : [...prev, tableId]
+        );
+    };
+
     return (
         <BaseLayout
             title="Sale e Tavoli"
@@ -295,21 +350,63 @@ const RoomsTablesManagement: React.FC = () => {
                 <div className="flex items-center gap-3">
                     <button
                         type="button"
-                        onClick={openCreateRoom}
-                        className="flex items-center gap-2 bg-brand-gradient text-white px-5 py-2.5 rounded-2xl font-bold text-sm hover:opacity-90 transition-all shadow-lg shadow-indigo-200"
+                        onClick={() => {
+                            setIsSelectionMode(!isSelectionMode);
+                            setSelectedTableIds([]);
+                        }}
+                        className={`flex items-center gap-2 border px-4 py-2.5 rounded-2xl text-sm font-semibold transition-all ${isSelectionMode
+                            ? 'bg-indigo-50 border-indigo-200 text-[#6366F1]'
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                            }`}
                     >
-                        <Plus size={18} />
-                        Nuova sala
+                        {isSelectionMode ? 'Annulla selezione' : 'Unisci tavoli'}
                     </button>
-                    <button
-                        type="button"
-                        onClick={() => selectedRoom && openCreateTable(selectedRoom.id)}
-                        disabled={!selectedRoom}
-                        className="flex items-center gap-2 bg-white border border-slate-200 text-slate-700 px-4 py-2.5 rounded-2xl text-sm font-semibold hover:bg-slate-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        <Plus size={16} />
-                        Nuovo tavolo veloce
-                    </button>
+                    {isSelectionMode && (
+                        <button
+                            type="button"
+                            onClick={() => {
+                                if (selectedTableIds.length >= 2) {
+                                    const selectedTables = rooms
+                                        .flatMap(r => r.tables)
+                                        .filter(t => selectedTableIds.includes(t.id));
+
+                                    const defaultName = selectedTables.map(t => t.name).join('+');
+                                    const totalCapacity = selectedTables.reduce((sum, t) => sum + t.seats, 0);
+
+                                    setVirtualTableForm({
+                                        name: defaultName,
+                                        capacity: totalCapacity
+                                    });
+                                    setShowVirtualTableModal(true);
+                                }
+                            }}
+                            disabled={selectedTableIds.length < 2}
+                            className="flex items-center gap-2 bg-brand-gradient text-white px-5 py-2.5 rounded-2xl font-bold text-sm hover:opacity-90 transition-all shadow-lg shadow-indigo-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            Crea tavolo unico ({selectedTableIds.length})
+                        </button>
+                    )}
+                    {!isSelectionMode && (
+                        <>
+                            <button
+                                type="button"
+                                onClick={openCreateRoom}
+                                className="flex items-center gap-2 bg-brand-gradient text-white px-5 py-2.5 rounded-2xl font-bold text-sm hover:opacity-90 transition-all shadow-lg shadow-indigo-200"
+                            >
+                                <Plus size={18} />
+                                Nuova sala
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => selectedRoom && openCreateTable(selectedRoom.id)}
+                                disabled={!selectedRoom}
+                                className="flex items-center gap-2 bg-white border border-slate-200 text-slate-700 px-4 py-2.5 rounded-2xl text-sm font-semibold hover:bg-slate-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <Plus size={16} />
+                                Nuovo tavolo veloce
+                            </button>
+                        </>
+                    )}
                 </div>
             </div>
 
@@ -404,43 +501,99 @@ const RoomsTablesManagement: React.FC = () => {
                                 </div>
 
                                 <div className={`grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 ${!room.isActive ? 'opacity-50 pointer-events-none' : ''}`}>
-                                    {room.tables.map((table) => (
-                                        <button
-                                            key={table.id}
-                                            type="button"
-                                            onClick={() => openEditTable(room.id, table)}
-                                            className="group bg-slate-50 rounded-2xl border border-slate-100 px-4 py-3 flex flex-col items-start gap-1 text-left hover:bg-indigo-50/60 hover:border-indigo-200 transition-all"
-                                        >
-                                            <div className="flex items-center justify-between w-full gap-2">
-                                                <span className="text-sm font-bold text-slate-900">{table.name}</span>
-                                                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-500">
-                                                    <Users size={12} className="text-slate-400 group-hover:text-[#6366F1]" />
-                                                    {table.seats}
-                                                </span>
-                                            </div>
-                                            <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide
-                                            ${table.status === 'available'
-                                                    ? 'bg-indigo-50 text-[#6366F1] border border-indigo-100'
-                                                    : table.status === 'reserved'
-                                                        ? 'bg-amber-50 text-amber-700 border border-amber-100'
-                                                        : 'bg-red-50 text-red-700 border border-red-100'
-                                                }
-                                        `}>
-                                                {table.status === 'available' && 'Libero'}
-                                                {table.status === 'reserved' && 'Riservato'}
-                                                {table.status === 'occupied' && 'Occupato'}
-                                            </span>
-                                        </button>
-                                    ))}
+                                    {room.tables.map((table) => {
+                                        const isSelected = selectedTableIds.includes(table.id);
+                                        const isVirtual = !!table.isVirtual;
 
-                                    <button
-                                        type="button"
-                                        onClick={() => openCreateTable(room.id)}
-                                        className="border border-dashed border-slate-200 rounded-2xl px-4 py-3 text-xs font-semibold text-slate-500 hover:border-indigo-300 hover:bg-indigo-50/40 hover:text-[#6366F1] flex items-center justify-center gap-2 transition-all"
-                                    >
-                                        <Plus size={14} />
-                                        Aggiungi tavolo
-                                    </button>
+                                        return (
+                                            <button
+                                                key={table.id}
+                                                type="button"
+                                                onClick={() => {
+                                                    if (isSelectionMode) {
+                                                        if (!isVirtual) {
+                                                            toggleTableSelection(table.id);
+                                                        }
+                                                    } else {
+                                                        // if virtual, maybe show details or allow edit? For now standard edit
+                                                        openEditTable(room.id, table);
+                                                    }
+                                                }}
+                                                className={`group relative rounded-2xl border px-4 py-3 flex flex-col items-start gap-1 text-left transition-all
+                                                ${isVirtual
+                                                        ? 'bg-indigo-50/30 border-dashed border-indigo-300'
+                                                        : 'bg-slate-50 border-slate-100 hover:bg-indigo-50/60 hover:border-indigo-200'}
+                                                ${isSelectionMode && isSelected ? 'ring-2 ring-indigo-500 bg-indigo-50' : ''}
+                                                ${isSelectionMode && isVirtual ? 'opacity-50 cursor-not-allowed' : ''}
+                                            `}
+                                            >
+                                                <div className="flex items-center justify-between w-full gap-2">
+                                                    <span className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                                                        {table.name}
+                                                        {isVirtual && (
+                                                            <span className="text-[10px] bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded-full uppercase tracking-wide">
+                                                                Virtuale
+                                                            </span>
+                                                        )}
+                                                    </span>
+                                                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-500">
+                                                        <Users size={12} className="text-slate-400 group-hover:text-[#6366F1]" />
+                                                        {table.seats}
+                                                    </span>
+                                                </div>
+
+                                                {isVirtual ? (
+                                                    <div className="flex items-center justify-between w-full mt-1">
+                                                        <span className="text-[10px] text-slate-500">
+                                                            Da: {table.originalTableIds?.length} tavoli
+                                                        </span>
+                                                        <div
+                                                            role="button"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleDeleteVirtualTable(room.id, table.id);
+                                                            }}
+                                                            className="p-1 hover:bg-red-100 rounded text-red-500"
+                                                            title="Elimina tavolo virtuale"
+                                                        >
+                                                            <Trash2 size={12} />
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide
+                                                    ${table.status === 'available'
+                                                            ? 'bg-indigo-50 text-[#6366F1] border border-indigo-100'
+                                                            : table.status === 'reserved'
+                                                                ? 'bg-amber-50 text-amber-700 border border-amber-100'
+                                                                : 'bg-red-50 text-red-700 border border-red-100'
+                                                        }
+                                                `}>
+                                                        {table.status === 'available' && 'Libero'}
+                                                        {table.status === 'reserved' && 'Riservato'}
+                                                        {table.status === 'occupied' && 'Occupato'}
+                                                    </span>
+                                                )}
+
+                                                {isSelectionMode && !isVirtual && (
+                                                    <div className={`absolute top-2 right-2 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${isSelected ? 'bg-[#6366F1] border-[#6366F1]' : 'border-slate-300'
+                                                        }`}>
+                                                        {isSelected && <Users size={10} className="text-white" />}
+                                                    </div>
+                                                )}
+                                            </button>
+                                        );
+                                    })}
+
+                                    {!isSelectionMode && (
+                                        <button
+                                            type="button"
+                                            onClick={() => openCreateTable(room.id)}
+                                            className="border border-dashed border-slate-200 rounded-2xl px-4 py-3 text-xs font-semibold text-slate-500 hover:border-indigo-300 hover:bg-indigo-50/40 hover:text-[#6366F1] flex items-center justify-center gap-2 transition-all"
+                                        >
+                                            <Plus size={14} />
+                                            Aggiungi tavolo
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         ))}
@@ -636,6 +789,63 @@ const RoomsTablesManagement: React.FC = () => {
 
                 </div>
             </div>
+            {showVirtualTableModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+                    <div className="bg-white rounded-3xl shadow-xl w-full max-w-sm p-6 space-y-4">
+                        <div>
+                            <h3 className="text-lg font-bold text-slate-900">Crea Tavolo Unico</h3>
+                            <p className="text-sm text-slate-500">
+                                Unisci {selectedTableIds.length} tavoli in un unico tavolo virtuale.
+                            </p>
+                        </div>
+
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                                    Nome tavolo virtuale
+                                </label>
+                                <input
+                                    type="text"
+                                    value={virtualTableForm.name}
+                                    onChange={(e) => setVirtualTableForm(prev => ({ ...prev, name: e.target.value }))}
+                                    className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-[#6366F1]"
+                                    placeholder="Es. Tavolo Gruppo"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                                    Capacità totale
+                                </label>
+                                <input
+                                    type="number"
+                                    value={virtualTableForm.capacity}
+                                    onChange={(e) => setVirtualTableForm(prev => ({ ...prev, capacity: Number(e.target.value) || 0 }))}
+                                    className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-[#6366F1]"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="flex items-center justify-end gap-2 pt-2">
+                            <button
+                                type="button"
+                                onClick={() => setShowVirtualTableModal(false)}
+                                className="px-4 py-2 text-sm font-semibold text-slate-500 hover:bg-slate-50 rounded-xl transition-all"
+                            >
+                                Annulla
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleCreateVirtualTable}
+                                className="px-4 py-2 text-sm font-bold text-white bg-brand-gradient rounded-xl hover:opacity-90 shadow-sm transition-all"
+                            >
+                                Crea tavolo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </BaseLayout>
     );
 };
