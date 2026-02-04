@@ -8,6 +8,7 @@ import Reservations from './pages/restaurant/Reservations'
 import MenuManagement from './pages/restaurant/MenuManagement'
 import RestaurantSettings from './pages/restaurant/RestaurantSettings'
 import RoomsTablesManagement from './pages/restaurant/RoomsTablesManagement'
+import RestaurantDetails from './pages/restaurant/RestaurantDetails'
 
 function AppRoutes() {
   const { isAuthenticated, isOwner } = useAuth();
@@ -45,6 +46,10 @@ function AppRoutes() {
       <Route
         path="/restaurant/rooms"
         element={isAuthenticated ? <RoomsTablesManagement /> : <Navigate to="/login" replace />}
+      />
+      <Route
+        path="/restaurant/details"
+        element={isAuthenticated ? <RestaurantDetails /> : <Navigate to="/login" replace />}
       />
 
       {/* Redirect generic dashboard to specific one */}
