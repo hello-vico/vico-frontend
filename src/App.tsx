@@ -9,6 +9,7 @@ import MenuManagement from './pages/restaurant/MenuManagement'
 import RestaurantSettings from './pages/restaurant/RestaurantSettings'
 import RoomsTablesManagement from './pages/restaurant/RoomsTablesManagement'
 import RestaurantDetails from './pages/restaurant/RestaurantDetails'
+import ManageReservation from './pages/public/ManageReservation'
 
 function AppRoutes() {
   const { isAuthenticated, isOwner } = useAuth();
@@ -61,6 +62,9 @@ function AppRoutes() {
             : <Navigate to="/login" replace />
         }
       />
+
+      {/* Public Reservation Management Route */}
+      <Route path="/prenotazioni/gestisci/:token" element={<ManageReservation />} />
     </Routes>
   )
 }
