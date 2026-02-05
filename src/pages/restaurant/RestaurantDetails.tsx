@@ -128,6 +128,7 @@ const initialDetails: VenueDetails = {
         creditCards: true,
         cash: true,
         digital: true,
+        divided: true,
     },
     policies: {
         cakeFromOutside: 'not_allowed',
