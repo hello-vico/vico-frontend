@@ -69,6 +69,7 @@ interface VenueDetails {
         creditCards: boolean;
         cash: boolean;
         digital: boolean;
+        divided: boolean;
     };
     policies: {
         cakeFromOutside: 'not_allowed' | 'allowed_free' | 'allowed_fee';
@@ -271,7 +272,7 @@ const RestaurantDetails: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
                     {/* Descrizione Generale */}
-                    <div className="col-span-1 md:col-span-2 lg:col-span-3 bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+                    <div className="col-span-1 md:col-span-2 lg:col-span-2 bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
                         <div className="flex items-center gap-2 mb-4">
                             <Info size={20} className="text-[#6366F1]" />
                             <h3 className="font-bold text-slate-800">Descrizione del locale</h3>
@@ -602,7 +603,7 @@ const RestaurantDetails: React.FC = () => {
                     </div>
 
                     {/* Regole della casa & Pagamenti */}
-                    <div className="col-span-1 md:col-span-2 lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="col-span-1 md:col-span-2 lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* Note & Policy Torte */}
                         <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
                             <div className="flex items-center gap-2 mb-4">
@@ -655,6 +656,11 @@ const RestaurantDetails: React.FC = () => {
                                     label="Pagamenti Digitali"
                                     checked={details.paymentMethods.digital}
                                     onChange={() => handleToggle('paymentMethods', 'digital')}
+                                />
+                                <ToggleItem
+                                    label="Conti Separati"
+                                    checked={details.paymentMethods.divided}
+                                    onChange={() => handleToggle('paymentMethods', 'divided')}
                                 />
                             </div>
                         </div>
